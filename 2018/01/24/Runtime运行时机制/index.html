@@ -5,18 +5,21 @@
   
 
   
-  <title>zwBlog</title>
+  <title>Runtime运行时机制 | zwBlog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="记录与分享">
-<meta property="og:type" content="website">
-<meta property="og:title" content="zwBlog">
-<meta property="og:url" content="http://yoursite.com/index.html">
+  <meta name="description" content="想深入理解Objective-C这门动态语言就不得不深入理解下它的“动态”是如何实现的。早先拜读过《Effective Objective-C 2.0》就让我更深入的窥探到OC运行时特别之处，本文当中也有部分内容借鉴自这本经典著作。第四届互联网大会的项目也完成了，年底闲来无事整理写些总结。 动态语言是相对于静态语言如C语言区别而言的。C语言在编译期就能决定了运行时应该调用的函数，函数地址实际上是硬">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Runtime运行时机制">
+<meta property="og:url" content="http://yoursite.com/2018/01/24/Runtime运行时机制/index.html">
 <meta property="og:site_name" content="zwBlog">
-<meta property="og:description" content="记录与分享">
+<meta property="og:description" content="想深入理解Objective-C这门动态语言就不得不深入理解下它的“动态”是如何实现的。早先拜读过《Effective Objective-C 2.0》就让我更深入的窥探到OC运行时特别之处，本文当中也有部分内容借鉴自这本经典著作。第四届互联网大会的项目也完成了，年底闲来无事整理写些总结。 动态语言是相对于静态语言如C语言区别而言的。C语言在编译期就能决定了运行时应该调用的函数，函数地址实际上是硬">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/308319-1ad920412e90db1d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2018-01-24T02:05:31.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="zwBlog">
-<meta name="twitter:description" content="记录与分享">
+<meta name="twitter:title" content="Runtime运行时机制">
+<meta name="twitter:description" content="想深入理解Objective-C这门动态语言就不得不深入理解下它的“动态”是如何实现的。早先拜读过《Effective Objective-C 2.0》就让我更深入的窥探到OC运行时特别之处，本文当中也有部分内容借鉴自这本经典著作。第四届互联网大会的项目也完成了，年底闲来无事整理写些总结。 动态语言是相对于静态语言如C语言区别而言的。C语言在编译期就能决定了运行时应该调用的函数，函数地址实际上是硬">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/308319-1ad920412e90db1d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
   
     <link rel="alternate" href="/atom.xml" title="zwBlog" type="application/atom+xml">
   
@@ -67,9 +70,7 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-    <article id="post-Runtime运行时机制" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-Runtime运行时机制" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/01/24/Runtime运行时机制/" class="article-date">
   <time datetime="2018-01-24T02:04:22.000Z" itemprop="datePublished">2018-01-24</time>
@@ -82,8 +83,8 @@
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/01/24/Runtime运行时机制/">Runtime运行时机制</a>
+    <h1 class="article-title" itemprop="name">
+      Runtime运行时机制
     </h1>
   
 
@@ -159,11 +160,9 @@
     </footer>
   </div>
   
-</article>
-
-
+    
   
-
+</article>
 
 </section>
         
