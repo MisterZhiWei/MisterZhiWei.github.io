@@ -6,18 +6,21 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Archives: 2016/6 | zwBlog</title>
+  <title>iOS开发-关于苹果健康数据的获取 | zwBlog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="记录与分享">
+  <meta name="description" content="关于iOS10的报错123Terminating app due to uncaught exception &amp;apos;NSInvalidArgumentException&amp;apos;,reason: &amp;apos;NSHealthUpdateUsageDescription must be set in the app&amp;apos;s Info.plistin order to request">
 <meta property="og:type" content="website">
-<meta property="og:title" content="zwBlog">
-<meta property="og:url" content="http://yoursite.com/archives/2016/06/index.html">
+<meta property="og:title" content="iOS开发-关于苹果健康数据的获取">
+<meta property="og:url" content="http://yoursite.com/iOSBlogs/iOS开发-关于苹果健康数据的获取.html">
 <meta property="og:site_name" content="zwBlog">
-<meta property="og:description" content="记录与分享">
+<meta property="og:description" content="关于iOS10的报错123Terminating app due to uncaught exception &amp;apos;NSInvalidArgumentException&amp;apos;,reason: &amp;apos;NSHealthUpdateUsageDescription must be set in the app&amp;apos;s Info.plistin order to request">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/308319-240d724cdc91a4c7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2018-01-24T02:25:02.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="zwBlog">
-<meta name="twitter:description" content="记录与分享">
+<meta name="twitter:title" content="iOS开发-关于苹果健康数据的获取">
+<meta name="twitter:description" content="关于iOS10的报错123Terminating app due to uncaught exception &amp;apos;NSInvalidArgumentException&amp;apos;,reason: &amp;apos;NSHealthUpdateUsageDescription must be set in the app&amp;apos;s Info.plistin order to request">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/308319-240d724cdc91a4c7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
   
     <link rel="alternative" href="/atom.xml" title="zwBlog" type="application/atom+xml">
   
@@ -135,49 +138,175 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="page-" class="article article-type-page " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2016" class="archive-year">2016</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2016/06/25/iOS开发-关于苹果健康数据的获取/" class="archive-article-date">
-  	<time datetime="2016-06-25T02:20:49.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-06-25</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/06/25/iOS开发-关于苹果健康数据的获取/">iOS开发-关于苹果健康数据的获取</a>
+    <h1 class="article-title" itemprop="name">
+      iOS开发-关于苹果健康数据的获取
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
+        
+        <a href="/iOSBlogs/iOS开发-关于苹果健康数据的获取.html" class="archive-article-date">
+  	<time datetime="2016-06-25T02:20:49.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-06-25</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ul>
+<li>关于iOS10的报错<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Terminating app due to uncaught exception &apos;NSInvalidArgumentException&apos;,</span><br><span class="line">reason: &apos;NSHealthUpdateUsageDescription must be set in the app&apos;s Info.plist</span><br><span class="line">in order to request write authorization.&apos;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>处理方法：在Info.plist文件中添加关键字<code>NSHealthShareUsageDescription</code>和<code>NSHealthUpdateUsageDescription</code>，写入和读取都需要。iOS10对于涉及用户隐私的很多数据获取都添加了类似的设置，可根据提示在plist文件中添加相应的权限字段。</p>
+<p>在苹果的 iOS8 系统中自带了健康应用，可以记录我们在一天当中的运动数据，比如走了多少步，一天走了或跑了多少公里等。还可以接入硬件设备以写入运动数据，HealthKit框架为苹果为采集各种健康数据源提供的接口，可以用来采集和整合各种健康数据的来源，如运动手环，AppleWatch，以及iPhone设备提供的健康数据。这里简单介绍下如何获取苹果健康的数据。<br>实现流程：</p>
+<h3 id="一、在工程中添加HealthKit库。"><a href="#一、在工程中添加HealthKit库。" class="headerlink" title="一、在工程中添加HealthKit库。"></a>一、在工程中添加HealthKit库。</h3><h3 id="二、创建模型（或在其他模型中添加-import），添加HKHealthStore属性，HKHealthStore是使用HealthKit中关键的一个类。"><a href="#二、创建模型（或在其他模型中添加-import），添加HKHealthStore属性，HKHealthStore是使用HealthKit中关键的一个类。" class="headerlink" title="二、创建模型（或在其他模型中添加#import），添加HKHealthStore属性，HKHealthStore是使用HealthKit中关键的一个类。"></a>二、创建模型（或在其他模型中添加#import），添加HKHealthStore属性，HKHealthStore是使用HealthKit中关键的一个类。</h3><h3 id="三、创建调用方法，在方法实现中主要要做的有3步"><a href="#三、创建调用方法，在方法实现中主要要做的有3步" class="headerlink" title="三、创建调用方法，在方法实现中主要要做的有3步:"></a>三、创建调用方法，在方法实现中主要要做的有3步:</h3><ul>
+<li><p>1、判断设备是否支持HealthKit框架</p>
+</li>
+<li><p>2、请求苹果健康的认证</p>
+</li>
+<li><p>3、获取苹果健康的数据</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line">// 方法代码</span><br><span class="line">- (void)getIphoneHealthData&#123;</span><br><span class="line"></span><br><span class="line">self.healthSteps = [NSMutableArray array];</span><br><span class="line"></span><br><span class="line">self.healthDistances = [NSMutableArray array];</span><br><span class="line"></span><br><span class="line">self.healthCalories = [NSMutableArray array];</span><br><span class="line"></span><br><span class="line">NSSet *getData;</span><br><span class="line"></span><br><span class="line">// 1.判断设备是否支持HealthKit框架</span><br><span class="line"></span><br><span class="line">if ([HKHealthStore isHealthDataAvailable]) &#123;</span><br><span class="line"></span><br><span class="line">getData = [self getData];</span><br><span class="line"></span><br><span class="line">&#125; else &#123;</span><br><span class="line"></span><br><span class="line">NSLog(@&quot;---------不支持 HealthKit 框架&quot;);</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">store = [[HKHealthStore alloc] init];</span><br><span class="line"></span><br><span class="line">// 2.请求苹果健康的认证</span><br><span class="line"></span><br><span class="line">[store requestAuthorizationToShareTypes:nil readTypes:getData completion:^(BOOL success, NSError * _Nullable error) &#123;</span><br><span class="line"></span><br><span class="line">if (!success) &#123;</span><br><span class="line"></span><br><span class="line">NSLog(@&quot;--------请求苹果健康认证失败&quot;);</span><br><span class="line"></span><br><span class="line">return ;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">dispatch_async(dispatch_get_main_queue(), ^&#123;</span><br><span class="line"></span><br><span class="line">// 3.获取苹果健康数据</span><br><span class="line"></span><br><span class="line">[self getHealthStepData];</span><br><span class="line"></span><br><span class="line">[self getHealthDistanceData];</span><br><span class="line"></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">&#125;];</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在第一步判断设备支持HealthKit框架后，设置好要获取的数据类型，笔者此处获取的是步数，距离数据。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">// getData方法</span><br><span class="line">- (NSSet *)getData&#123;</span><br><span class="line"></span><br><span class="line">HKQuantityType  *step = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierStepCount];</span><br><span class="line"></span><br><span class="line">HKQuantityType *distance = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierDistanceWalkingRunning];</span><br><span class="line"></span><br><span class="line">return [NSSet setWithObjects:step,distance, nil];</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>第二步请求苹果健康的认证，此处用到HKHealthStore属性，实例化属性后调用认证方法，注意方法中的参数ShareTypes 和 readTypes，一个是认证写入类型，一个是认证读取类型，认证成功后开始最重要的第三步，获取数据，此处为异步执行。</p>
+<p>在获取数据的方法中时间的设置是比较麻烦的，不过都是一样的；HKQuantityType实例对象用于设置要获取的数据类型，NSPredicate实例对象用于设置获取数据的时间段，HKStatisticsCollectionQuery实例对象用于获取数据，在获取的数据结果中需要把每一条数据遍历出来，可以做一些需要的格式的处理。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br></pre></td><td class="code"><pre><span class="line">- (void)getHealthStepData&#123;</span><br><span class="line"></span><br><span class="line">HKHealthStore *healthStore = [[HKHealthStore alloc]init];</span><br><span class="line"></span><br><span class="line">NSCalendar *calendar = [NSCalendar currentCalendar];</span><br><span class="line"></span><br><span class="line">// 设置时间支持单位</span><br><span class="line"></span><br><span class="line">NSDateComponents *anchorComponents =</span><br><span class="line"></span><br><span class="line">[calendar components:NSCalendarUnitDay | NSCalendarUnitMonth |</span><br><span class="line"></span><br><span class="line">NSCalendarUnitYear | NSCalendarUnitWeekday fromDate:[NSDate date]];</span><br><span class="line"></span><br><span class="line">NSDate *anchorDate = [calendar dateFromComponents:anchorComponents];</span><br><span class="line"></span><br><span class="line">// 获取数据的截止时间 今天</span><br><span class="line"></span><br><span class="line">NSDate *endDate = [NSDate date];</span><br><span class="line"></span><br><span class="line">// 获取数据的起始时间 此处取从今日往前推100天的数据</span><br><span class="line"></span><br><span class="line">NSDate *startDate = [NSDate dateWithTimeIntervalSinceNow:-100*24*60*60];</span><br><span class="line"></span><br><span class="line">// 数据类型</span><br><span class="line"></span><br><span class="line">HKQuantityType *type = [HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierStepCount];</span><br><span class="line"></span><br><span class="line">// Your interval: sum by hour</span><br><span class="line"></span><br><span class="line">NSDateComponents *intervalComponents = [[NSDateComponents alloc] init];</span><br><span class="line"></span><br><span class="line">intervalComponents.day = 1;</span><br><span class="line"></span><br><span class="line">// Example predicate 用于获取设置时间段内的数据</span><br><span class="line"></span><br><span class="line">NSPredicate *predicate = [HKQuery predicateForSamplesWithStartDate:startDate endDate:endDate options:HKQueryOptionStrictStartDate];</span><br><span class="line"></span><br><span class="line">HKStatisticsCollectionQuery *query = [[HKStatisticsCollectionQuery alloc] initWithQuantityType:type quantitySamplePredicate:predicate options:HKStatisticsOptionCumulativeSum anchorDate:anchorDate intervalComponents:intervalComponents];</span><br><span class="line"></span><br><span class="line">query.initialResultsHandler = ^(HKStatisticsCollectionQuery *query, HKStatisticsCollection *result, NSError *error) &#123;</span><br><span class="line"></span><br><span class="line">for (HKStatistics *sample in [result statistics]) &#123;</span><br><span class="line"></span><br><span class="line">//            NSLog(@&quot;--------------%@ 至 %@ : %@&quot;, sample.startDate, sample.endDate, sample.sumQuantity);</span><br><span class="line"></span><br><span class="line">NSDate *date = sample.endDate;</span><br><span class="line"></span><br><span class="line">NSDateFormatter *formatter = [[NSDateFormatter alloc] init];</span><br><span class="line"></span><br><span class="line">[formatter setDateFormat:@&quot;yyyy-MM-dd&quot;];</span><br><span class="line"></span><br><span class="line">NSString *dateTime = [formatter stringFromDate:date];</span><br><span class="line"></span><br><span class="line">double totalStep = [sample.sumQuantity doubleValueForUnit:[HKUnit countUnit]];</span><br><span class="line"></span><br><span class="line">NSString *value = [NSString stringWithFormat:@&quot;%f&quot;,totalStep];</span><br><span class="line"></span><br><span class="line">NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:</span><br><span class="line"></span><br><span class="line">dateTime,@&quot;dateTime&quot;,</span><br><span class="line"></span><br><span class="line">value,@&quot;value&quot;,nil];</span><br><span class="line"></span><br><span class="line">[self.healthSteps addObject:dic];</span><br><span class="line"></span><br><span class="line">//            NSLog(@&quot;gaizaoDateStyle:%@  Dic = %@&quot;,self.healthSteps,dic);</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">self.healthCalories = self.healthSteps;</span><br><span class="line"></span><br><span class="line">NSDictionary *healthSteps = [NSDictionary dictionaryWithObjectsAndKeys:</span><br><span class="line"></span><br><span class="line">self.healthSteps,@&quot;healthSteps&quot;,</span><br><span class="line"></span><br><span class="line">self.healthCalories,@&quot;healthCalories&quot;,nil];</span><br><span class="line"></span><br><span class="line">NSLog(@&quot;改造数据格式：%@&quot;,healthSteps);</span><br><span class="line"></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">[healthStore executeQuery:query];</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>由于苹果健康应用中，用户可以自己手动添加数据，所以为了获取数据的准确性，像微信运动会把这些数据过滤掉，那么如何过滤呢？</p>
+<p>在获取的数据结果中，每一条结果都有数据来源属性，打印HKStatistics实例对象的sources属性就可以看到数据的所有来源（因为此处获取的是一天的数据，一天内的数据来源都会被打印出来），如果有收到添加的数据，可以在打印结果中看到com.apple.Health数据源，我们要过滤的就是它。</p>
+<p>接下来就是用获取的数据总数把手动添加的数据减掉，结果就是我们想要获取的准确的数据。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">double totalStep = [sample.sumQuantity doubleValueForUnit:[HKUnit countUnit]];</span><br><span class="line"></span><br><span class="line">NSString *appleHealth = @&quot;com.apple.Health&quot;;</span><br><span class="line"></span><br><span class="line">double editStep  = 0.0;</span><br><span class="line"></span><br><span class="line">for (HKSource *source in sample.sources) &#123;</span><br><span class="line"></span><br><span class="line">if ([source.bundleIdentifier isEqualToString:appleHealth]) &#123;</span><br><span class="line"></span><br><span class="line">// 获取用户自己添加的数据 并减去，防止用户手动刷数据</span><br><span class="line"></span><br><span class="line">HKSource *healthSource = source;</span><br><span class="line"></span><br><span class="line">editStep  = [[sample sumQuantityForSource:healthSource] doubleValueForUnit:[HKUnit countUnit]];</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">NSInteger step = (NSInteger)totalStep - (NSInteger)editStep;</span><br><span class="line"></span><br><span class="line">NSString *value = [NSString stringWithFormat:@&quot;%ld&quot;,step];</span><br></pre></td></tr></table></figure>
+<p>最后是获取距离的方法，和前边类似。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- (void)getHealthDistanceData&#123;</span><br><span class="line"></span><br><span class="line">HKHealthStore *healthStore = [[HKHealthStore alloc]init];</span><br><span class="line"></span><br><span class="line">NSCalendar *calendar = [NSCalendar currentCalendar];</span><br><span class="line"></span><br><span class="line">NSDateComponents *anchorComponents =</span><br><span class="line"></span><br><span class="line">[calendar components:NSCalendarUnitDay | NSCalendarUnitMonth |</span><br><span class="line"></span><br><span class="line">NSCalendarUnitYear | NSCalendarUnitWeekday fromDate:[NSDate date]];</span><br><span class="line"></span><br><span class="line">NSDate *anchorDate = [calendar dateFromComponents:anchorComponents];</span><br><span class="line"></span><br><span class="line">NSDate *endDate = [NSDate date];</span><br><span class="line"></span><br><span class="line">NSDate *startDate = [NSDate dateWithTimeIntervalSinceNow:-100*24*60*60];</span><br><span class="line"></span><br><span class="line">HKQuantityType *type = [HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierDistanceWalkingRunning];</span><br><span class="line"></span><br><span class="line">// Your interval: sum by hour</span><br><span class="line"></span><br><span class="line">NSDateComponents *intervalComponents = [[NSDateComponents alloc] init];</span><br><span class="line"></span><br><span class="line">intervalComponents.day = 1;</span><br><span class="line"></span><br><span class="line">// Example predicate</span><br><span class="line"></span><br><span class="line">NSPredicate *predicate = [HKQuery predicateForSamplesWithStartDate:startDate endDate:endDate options:HKQueryOptionStrictStartDate];</span><br><span class="line"></span><br><span class="line">HKStatisticsCollectionQuery *query = [[HKStatisticsCollectionQuery alloc] initWithQuantityType:type quantitySamplePredicate:predicate options:HKStatisticsOptionCumulativeSum anchorDate:anchorDate intervalComponents:intervalComponents];</span><br><span class="line"></span><br><span class="line">query.initialResultsHandler = ^(HKStatisticsCollectionQuery *query, HKStatisticsCollection *result, NSError *error) &#123;</span><br><span class="line"></span><br><span class="line">for (HKStatistics *sample in [result statistics]) &#123;</span><br><span class="line"></span><br><span class="line">//            NSLog(@&quot;+++++++++++++++%@ 至 %@ : %@&quot;, sample.startDate, sample.endDate, sample.sumQuantity);</span><br><span class="line"></span><br><span class="line">NSDate *date = sample.endDate;</span><br><span class="line"></span><br><span class="line">NSDateFormatter *formatter = [[NSDateFormatter alloc] init];</span><br><span class="line"></span><br><span class="line">[formatter setDateFormat:@&quot;yyyy-MM-dd&quot;];</span><br><span class="line"></span><br><span class="line">NSString *dateTime = [formatter stringFromDate:date];</span><br><span class="line"></span><br><span class="line">double totalDistance = [sample.sumQuantity doubleValueForUnit:[HKUnit meterUnit]];</span><br><span class="line"></span><br><span class="line">NSString *appleHealth = @&quot;com.apple.Health&quot;;</span><br><span class="line"></span><br><span class="line">//            double floor = [sample.sumQuantity doubleValueForUnit:[HKUnit yardUnit]];</span><br><span class="line"></span><br><span class="line">double editDistance  = 0.0;</span><br><span class="line"></span><br><span class="line">for (HKSource *source in sample.sources) &#123;</span><br><span class="line"></span><br><span class="line">if ([source.bundleIdentifier isEqualToString:appleHealth]) &#123;</span><br><span class="line"></span><br><span class="line">// 获取用户自己添加的数据 并减去，防止用户手动刷数据</span><br><span class="line"></span><br><span class="line">HKSource *healthSource = source;</span><br><span class="line"></span><br><span class="line">editDistance = [[sample sumQuantityForSource:healthSource] doubleValueForUnit:[HKUnit meterUnit]];</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">double distance = totalDistance/1000 - editDistance/1000;</span><br><span class="line"></span><br><span class="line">NSString *value = [NSString stringWithFormat:@&quot;%f&quot;,distance];</span><br><span class="line"></span><br><span class="line">NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:</span><br><span class="line"></span><br><span class="line">dateTime,@&quot;dateTime&quot;,</span><br><span class="line"></span><br><span class="line">value,@&quot;value&quot;,nil];</span><br><span class="line"></span><br><span class="line">[self.healthDistances addObject:dic];</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">NSLog(@&quot;改造距离格式：%@&quot;,self.healthDistances);</span><br><span class="line"></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">[healthStore executeQuery:query];</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在打包时候需要打开HealthKit使用的开关，如图：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/308319-240d724cdc91a4c7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="屏幕快照 2016-08-25 下午5.15.31.png"></p>
+<p>此外打包证书也需要勾选苹果健康选项，由于开发者账号划归别的部门负责了，所以没法截图了。。。</p>
+<p>#踩的坑<br>之前做了一个健康运动的APP，要把苹果健康的数据和fitbit手环的数据比较处理后做展示，结果发现请求fitbit的数据产生的起止时间段内如果有没数据的，比如步数，卡路里，等，会都返回0，还比较人性化。但是苹果健康就没这么友好了，如果没有数据那就是没有，根本不会给你0，比如2015年1月1号到2015年1月20号的数据中1月10号这天的数据被删了，那返回的数据就只有19条，10号这天的不会返回0，直接就没有这条数据。再或者本身开始使用苹果健康记录数据的时间就是从2015年1月10号开始的，那1月10号之前的数据就都没有，不会返回0给你。</p>
+<p><a href="https://github.com/MisterZhiWei/iPhoneHealth" target="_blank" rel="noopener">demo地址</a></p>
 
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/iOSBlogs/iOS开发-关于苹果健康数据的获取.html" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
-  
-  
-    </div></section>
+
   
 
-    
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+  
+  <div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="" data-title="iOS开发-关于苹果健康数据的获取" data-url="http://yoursite.com/iOSBlogs/iOS开发-关于苹果健康数据的获取.html"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+  
+  
+  
+
+  
+
+  
+
+  
 
 
           </div>
@@ -201,7 +330,7 @@
 		mathjax: false,
 		isHome: false,
 		isPost: false,
-		isArchive: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
