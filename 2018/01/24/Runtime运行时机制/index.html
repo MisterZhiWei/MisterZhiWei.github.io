@@ -9,6 +9,7 @@
   <title>Runtime运行时机制 | zwBlog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="想深入理解Objective-C这门动态语言就不得不深入理解下它的“动态”是如何实现的。早先拜读过《Effective Objective-C 2.0》就让我更深入的窥探到OC运行时特别之处，本文当中也有部分内容借鉴自这本经典著作。第四届互联网大会的项目也完成了，年底闲来无事整理写些总结。 动态语言是相对于静态语言如C语言区别而言的。C语言在编译期就能决定了运行时应该调用的函数，函数地址实际上是硬">
+<meta name="keywords" content="iOS开发">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Runtime运行时机制">
 <meta property="og:url" content="http://yoursite.com/2018/01/24/Runtime运行时机制/index.html">
@@ -18,7 +19,7 @@
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/308319-7c6655e04b10d3ff.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/308319-9982b9792794e9b1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/308319-bccb3f7467fc0ade.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2018-01-24T02:17:01.000Z">
+<meta property="og:updated_time" content="2018-01-24T03:57:06.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Runtime运行时机制">
 <meta name="twitter:description" content="想深入理解Objective-C这门动态语言就不得不深入理解下它的“动态”是如何实现的。早先拜读过《Effective Objective-C 2.0》就让我更深入的窥探到OC运行时特别之处，本文当中也有部分内容借鉴自这本经典著作。第四届互联网大会的项目也完成了，年底闲来无事整理写些总结。 动态语言是相对于静态语言如C语言区别而言的。C语言在编译期就能决定了运行时应该调用的函数，函数地址实际上是硬">
@@ -218,6 +219,17 @@
     <div class="article-info article-info-index">
       
       
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">iOS开发</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
       
 
       
@@ -282,6 +294,15 @@
   
 <nav id="article-nav">
   
+    <a href="/2018/01/25/iOS开发折线图-支持视图点击查看值/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          iOS开发折线图-支持视图点击查看值
+        
+      </div>
+    </a>
+  
   
     <a href="/2016/06/25/iOS开发-关于苹果健康数据的获取/" id="article-nav-older" class="article-nav-link-wrap">
       <div class="article-nav-title">iOS开发-关于苹果健康数据的获取</div>
@@ -333,6 +354,16 @@
   
   
 
+  
+  <div id="SOHUCS" sid="Runtime运行时机制" ></div> 
+<script charset="utf-8" type="text/javascript" src="//changyan.sohu.com/upload/changyan.js" ></script>
+<script type="text/javascript">
+    window.changyan.api.config({
+        appid: "true",
+        conf: "true"
+    });
+</script>
+</script>
   
 
   
@@ -420,6 +451,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
             <input type="checkbox" q-on="click:toggleTag(e)" q-attr="checked:showTags">
           </label>
           <ul class="article-tag-list" q-show="showTags">
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">iOS开发</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">iOS开发 苹果健康</a>
+              </li>
             
             <div class="clearfix"></div>
           </ul>
