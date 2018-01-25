@@ -8,13 +8,13 @@
   <link rel="dns-prefetch" href="http://yoursite.com">
   <title>封装静态库调试时添加工程的相关问题 | zwBlog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="在我们封装静态库时，首先会把需要封装成.a文件的部分抽离出来，放到另一个独立的工程中作为引用。而为了方便调试，我们又需要把这个封装的工程放到当前工程中进行代码调试。本文主要简述在一个工程中如何引入另外一个工程，以及添加时的问题如何处理。 添加步骤：一、先把需要封装成.a的工程文件，正常运行生成.a文件，拿到生成的文件添加到需要引入该文件的工程中。 二、将添加的文件中的.a文件删除掉，然后将封装.a">
+  <meta name="description" content="在我们封装静态库时，首先会把需要封装成.a文件的部分抽离出来，放到另一个独立的工程中作为引用。而为了方便调试，我们又需要把这个封装的工程放到当前工程中进行代码调试。本文主要简述在一个工程中如何引入另外一个工程，以及添加时的问题如何处理。 添加步骤：一、先把需要封装成.a的工程文件，正常运行生成.a文件，拿到生成的文件添加到需要引入该文件的工程中。">
 <meta name="keywords" content="静态库,调试">
 <meta property="og:type" content="article">
 <meta property="og:title" content="封装静态库调试时添加工程的相关问题">
 <meta property="og:url" content="http://yoursite.com/2014/05/25/封装静态库调试时添加工程的相关问题/index.html">
 <meta property="og:site_name" content="zwBlog">
-<meta property="og:description" content="在我们封装静态库时，首先会把需要封装成.a文件的部分抽离出来，放到另一个独立的工程中作为引用。而为了方便调试，我们又需要把这个封装的工程放到当前工程中进行代码调试。本文主要简述在一个工程中如何引入另外一个工程，以及添加时的问题如何处理。 添加步骤：一、先把需要封装成.a的工程文件，正常运行生成.a文件，拿到生成的文件添加到需要引入该文件的工程中。 二、将添加的文件中的.a文件删除掉，然后将封装.a">
+<meta property="og:description" content="在我们封装静态库时，首先会把需要封装成.a文件的部分抽离出来，放到另一个独立的工程中作为引用。而为了方便调试，我们又需要把这个封装的工程放到当前工程中进行代码调试。本文主要简述在一个工程中如何引入另外一个工程，以及添加时的问题如何处理。 添加步骤：一、先把需要封装成.a的工程文件，正常运行生成.a文件，拿到生成的文件添加到需要引入该文件的工程中。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/308319-d87a48134f5cd789.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/308319-3cbd92ad1b506b30.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
@@ -26,10 +26,10 @@
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/308319-60f80c481cf61187.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/308319-83fe0db2e563cc44.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/308319-8d4e0d3ee1fafc53.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2018-01-25T02:31:37.000Z">
+<meta property="og:updated_time" content="2018-01-25T07:19:16.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="封装静态库调试时添加工程的相关问题">
-<meta name="twitter:description" content="在我们封装静态库时，首先会把需要封装成.a文件的部分抽离出来，放到另一个独立的工程中作为引用。而为了方便调试，我们又需要把这个封装的工程放到当前工程中进行代码调试。本文主要简述在一个工程中如何引入另外一个工程，以及添加时的问题如何处理。 添加步骤：一、先把需要封装成.a的工程文件，正常运行生成.a文件，拿到生成的文件添加到需要引入该文件的工程中。 二、将添加的文件中的.a文件删除掉，然后将封装.a">
+<meta name="twitter:description" content="在我们封装静态库时，首先会把需要封装成.a文件的部分抽离出来，放到另一个独立的工程中作为引用。而为了方便调试，我们又需要把这个封装的工程放到当前工程中进行代码调试。本文主要简述在一个工程中如何引入另外一个工程，以及添加时的问题如何处理。 添加步骤：一、先把需要封装成.a的工程文件，正常运行生成.a文件，拿到生成的文件添加到需要引入该文件的工程中。">
 <meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/308319-d87a48134f5cd789.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
   
     <link rel="alternative" href="/atom.xml" title="zwBlog" type="application/atom+xml">
@@ -169,8 +169,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>在我们封装静态库时，首先会把需要封装成.a文件的部分抽离出来，放到另一个独立的工程中作为引用。而为了方便调试，我们又需要把这个封装的工程放到当前工程中进行代码调试。本文主要简述在一个工程中如何引入另外一个工程，以及添加时的问题如何处理。</p>
-<p>添加步骤：<br>一、先把需要封装成.a的工程文件，正常运行生成.a文件，拿到生成的文件添加到需要引入该文件的工程中。</p>
-<p>二、将添加的文件中的.a文件删除掉，然后将封装.a的工程拖到此处。<br>如图：</p>
+<p>添加步骤：<br>一、先把需要封装成.a的工程文件，正常运行生成.a文件，拿到生成的文件添加到需要引入该文件的工程中。<br><a id="more"></a><br>二、将添加的文件中的.a文件删除掉，然后将封装.a的工程拖到此处。<br>如图：</p>
 <p><img src="http://upload-images.jianshu.io/upload_images/308319-d87a48134f5cd789.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="封装的SDK文件.png"></p>
 <p><img src="http://upload-images.jianshu.io/upload_images/308319-3cbd92ad1b506b30.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="替换添加工程.png"></p>
 <p>三、如图做如下操作<br>1.添加lib文件</p>
@@ -448,11 +447,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">相册编辑</a>
+                <a href="javascript:void(0)" class="js-tag color1">iOS开发 苹果健康</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">iOS开发 苹果健康</a>
+                <a href="javascript:void(0)" class="js-tag color5">相册编辑</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -464,6 +463,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">折线图</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">行为统计</a>
               </li>
              
@@ -472,15 +475,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">折线图</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">自定义按钮</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">录屏</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -493,6 +488,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">调试</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">录屏</a>
               </li>
             
             <div class="clearfix"></div>

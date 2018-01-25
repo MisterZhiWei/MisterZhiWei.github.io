@@ -8,20 +8,20 @@
   <link rel="dns-prefetch" href="http://yoursite.com">
   <title>iOS开发折线图-支持视图点击查看值 | zwBlog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="简述：折线图的使用场景主要集中在股票和与运动相关的APP界面中，运动类的如苹果健康，微信健康等。   其中运动类APP中一般支持查看天、月、年的数据图，由于界面宽度有限，当显示整月数据的时候，点与点之间的距离就会很近，用户也很难大概的估计点的数值，因此有的APP的折线图还支持点的点击查看数值功能，如微信运动的月数据（上图）,接下来就介绍一下如何绘制实现这样的界面和点击查看功能。  逻辑步骤：1.首">
+  <meta name="description" content="简述：折线图的使用场景主要集中在股票和与运动相关的APP界面中，运动类的如苹果健康，微信健康等。   其中运动类APP中一般支持查看天、月、年的数据图，由于界面宽度有限，当显示整月数据的时候，点与点之间的距离就会很近，用户也很难大概的估计点的数值，因此有的APP的折线图还支持点的点击查看数值功能，如微信运动的月数据（上图）,接下来就介绍一下如何绘制实现这样的界面和点击查看功能。">
 <meta name="keywords" content="折线图">
 <meta property="og:type" content="article">
 <meta property="og:title" content="iOS开发折线图-支持视图点击查看值">
 <meta property="og:url" content="http://yoursite.com/2016/08/31/iOS开发折线图-支持视图点击查看值/index.html">
 <meta property="og:site_name" content="zwBlog">
-<meta property="og:description" content="简述：折线图的使用场景主要集中在股票和与运动相关的APP界面中，运动类的如苹果健康，微信健康等。   其中运动类APP中一般支持查看天、月、年的数据图，由于界面宽度有限，当显示整月数据的时候，点与点之间的距离就会很近，用户也很难大概的估计点的数值，因此有的APP的折线图还支持点的点击查看数值功能，如微信运动的月数据（上图）,接下来就介绍一下如何绘制实现这样的界面和点击查看功能。  逻辑步骤：1.首">
+<meta property="og:description" content="简述：折线图的使用场景主要集中在股票和与运动相关的APP界面中，运动类的如苹果健康，微信健康等。   其中运动类APP中一般支持查看天、月、年的数据图，由于界面宽度有限，当显示整月数据的时候，点与点之间的距离就会很近，用户也很难大概的估计点的数值，因此有的APP的折线图还支持点的点击查看数值功能，如微信运动的月数据（上图）,接下来就介绍一下如何绘制实现这样的界面和点击查看功能。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/308319-70471374557a6e92.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/308319-accc3497f7979679.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2018-01-25T02:14:04.000Z">
+<meta property="og:updated_time" content="2018-01-25T07:20:51.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS开发折线图-支持视图点击查看值">
-<meta name="twitter:description" content="简述：折线图的使用场景主要集中在股票和与运动相关的APP界面中，运动类的如苹果健康，微信健康等。   其中运动类APP中一般支持查看天、月、年的数据图，由于界面宽度有限，当显示整月数据的时候，点与点之间的距离就会很近，用户也很难大概的估计点的数值，因此有的APP的折线图还支持点的点击查看数值功能，如微信运动的月数据（上图）,接下来就介绍一下如何绘制实现这样的界面和点击查看功能。  逻辑步骤：1.首">
+<meta name="twitter:description" content="简述：折线图的使用场景主要集中在股票和与运动相关的APP界面中，运动类的如苹果健康，微信健康等。   其中运动类APP中一般支持查看天、月、年的数据图，由于界面宽度有限，当显示整月数据的时候，点与点之间的距离就会很近，用户也很难大概的估计点的数值，因此有的APP的折线图还支持点的点击查看数值功能，如微信运动的月数据（上图）,接下来就介绍一下如何绘制实现这样的界面和点击查看功能。">
 <meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/308319-70471374557a6e92.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
   
     <link rel="alternative" href="/atom.xml" title="zwBlog" type="application/atom+xml">
@@ -163,7 +163,7 @@
         <p>简述：<br>折线图的使用场景主要集中在股票和与运动相关的APP界面中，运动类的如苹果健康，微信健康等。</p>
 <p><img src="http://upload-images.jianshu.io/upload_images/308319-70471374557a6e92.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="WeChat_1472545882.jpeg"></p>
 <p><img src="http://upload-images.jianshu.io/upload_images/308319-accc3497f7979679.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="WeChat_1464241434.jpeg"></p>
-<p>其中运动类APP中一般支持查看天、月、年的数据图，由于界面宽度有限，当显示整月数据的时候，点与点之间的距离就会很近，用户也很难大概的估计点的数值，因此有的APP的折线图还支持点的点击查看数值功能，如微信运动的月数据（上图）,接下来就介绍一下如何绘制实现这样的界面和点击查看功能。</p>
+<p>其中运动类APP中一般支持查看天、月、年的数据图，由于界面宽度有限，当显示整月数据的时候，点与点之间的距离就会很近，用户也很难大概的估计点的数值，因此有的APP的折线图还支持点的点击查看数值功能，如微信运动的月数据（上图）,接下来就介绍一下如何绘制实现这样的界面和点击查看功能。<br><a id="more"></a></p>
 <hr>
 <p>逻辑步骤：<br>1.首先图表的显示是通过绘制图层实现的，而由于渐变效果需要对图层进行剪切，所以要达到这样的显示效果，要两个View叠加显示，下层View为横纵坐标层，上层为折线图层。考虑到大部分折线图都会有侧滑加载更多的需求，因此笔者也用collectionView实现了该功能。</p>
 <p>2.关于数据的计算，笔者绘制的图表中的数据分为4部分，分别为：纵坐标，横坐标，计算后的点和显示点的实际数值。其中需要计算的一般为纵坐标，和显示点。由于笔者demo中用的都是计算过的假数据，所以此处详细的说一下数据到转化到图表显示坐标和点的思路。</p>
@@ -433,11 +433,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">相册编辑</a>
+                <a href="javascript:void(0)" class="js-tag color1">iOS开发 苹果健康</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">iOS开发 苹果健康</a>
+                <a href="javascript:void(0)" class="js-tag color5">相册编辑</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -449,6 +449,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">折线图</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">行为统计</a>
               </li>
              
@@ -457,15 +461,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">折线图</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">自定义按钮</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">录屏</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -478,6 +474,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">调试</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">录屏</a>
               </li>
             
             <div class="clearfix"></div>

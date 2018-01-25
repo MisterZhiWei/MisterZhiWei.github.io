@@ -25,7 +25,7 @@
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/308319-3362945fa6d3c498.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/308319-c1f75cf5966f0e0b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/308319-a22efe1c8381d7c0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2018-01-25T02:39:56.000Z">
+<meta property="og:updated_time" content="2018-01-25T07:21:41.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SceneKit开发关于加载obj格式文件的处理">
 <meta name="twitter:description" content="SceneKit是苹果的3D引擎，一般用于游戏开发。除游戏外其他的应用场景一般是3D效果的物体展示，比如京东就有用，最近我们做的会展的项目有部分展品也要用到这样的场景，所以遇到些问题，与大家分享一下，也希望跟大家交流，共同进步。  SceneKit可直接加载展示的文件格式有.dae、.scn、和.obj，关于加载的格式苹果官方也有说明，官方文档,除.scn外其他两种都是3dmax导出的，.scn格">
@@ -169,8 +169,7 @@
       
         <p>SceneKit是苹果的3D引擎，一般用于游戏开发。除游戏外其他的应用场景一般是3D效果的物体展示，比如京东就有用，最近我们做的会展的项目有部分展品也要用到这样的场景，所以遇到些问题，与大家分享一下，也希望跟大家交流，共同进步。</p>
 <p><img src="http://upload-images.jianshu.io/upload_images/308319-ddb5fbe2dc81ab8a.gif?imageMogr2/auto-orient/strip" alt="展示效果.gif"></p>
-<p>SceneKit可直接加载展示的文件格式有<code>.dae</code>、<code>.scn</code>、和<code>.obj</code>，关于加载的格式苹果官方也有说明，<a href="https://developer.apple.com/documentation/scenekit/scnscene" target="_blank" rel="noopener">官方文档</a>,除<code>.scn</code>外其他两种都是3dmax导出的，<code>.scn</code>格式可直接查看</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/308319-a477e930411882d2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="scn格式.png"></p>
+<p>SceneKit可直接加载展示的文件格式有<code>.dae</code>、<code>.scn</code>、和<code>.obj</code>，关于加载的格式苹果官方也有说明，<a href="https://developer.apple.com/documentation/scenekit/scnscene" target="_blank" rel="noopener">官方文档</a>,除<code>.scn</code>外其他两种都是3dmax导出的，<code>.scn</code>格式可直接查看<br><a id="more"></a><br><img src="http://upload-images.jianshu.io/upload_images/308319-a477e930411882d2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="scn格式.png"></p>
 <p><code>.dae</code>在Xcode中直接查看也是渲染后的效果</p>
 <p><img src="http://upload-images.jianshu.io/upload_images/308319-18e0ecf52c3d3b53.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="dae格式.png"></p>
 <p>而<code>obj</code>格式文件实际包含3个类型文件<code>.obj</code>、<code>.mtl</code>和<code>.jpg</code>的渲染图片，<code>.obj</code>是未渲染的3D模型，<code>.mtl</code>文件（Material Library File）是材质库文件，描述的是物体的材质信息。只加载<code>.obj</code>文件效果是这样的</p>
@@ -494,11 +493,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">相册编辑</a>
+                <a href="javascript:void(0)" class="js-tag color1">iOS开发 苹果健康</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">iOS开发 苹果健康</a>
+                <a href="javascript:void(0)" class="js-tag color5">相册编辑</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -510,6 +509,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">折线图</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">行为统计</a>
               </li>
              
@@ -518,15 +521,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">折线图</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">自定义按钮</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">录屏</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -539,6 +534,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">调试</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">录屏</a>
               </li>
             
             <div class="clearfix"></div>

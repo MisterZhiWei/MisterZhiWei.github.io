@@ -19,7 +19,7 @@
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/308319-4ae3d78e6eab6892.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/308319-edc3a36a5087fb4e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/308319-b48a0a22d2f7000d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2018-01-25T02:27:25.000Z">
+<meta property="og:updated_time" content="2018-01-25T07:23:07.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS开发多线程-NSOperation  GCD详解">
 <meta name="twitter:description" content="iOS多线程开发必须知道的概念名词：1. 进程 进程（process）就是一个正在执行的程序的实例。也就是说我们的每一个APP程序在执行时实例都是一个进程，也可以说在APP执行时，它只拥有唯一的一个进程。 每一个进程都是独立的，每一个进程均在专属的内存空间内，iOS中每一个App（一个进程）都有自己独特的内存和磁盘空间，别的App（进程）是不允许访问的（越狱除外）。iOS开发中应用程序之间互相调用">
@@ -168,6 +168,7 @@
 <li>在UNIX和Linux系统中是有进程层次结构的，当进程创建了另一个进程后，父进程和子进程就以某种方式继续保持联系。子进程自身可以创建更多的进程，组成一个进程的层次结构。（进程只有一个父进程但是可以有0个，1个或多个子进程。）而Windows中没有进程层次的概念，所有进程地位相同。唯一类似进程层次的地方是在创建进程的时候父进程得到一个特别的令牌（称为句柄），该令牌可以用来控制子进程。但是父进程可以把这个令牌传送给其他进程，这样就不存在进程层次了。</li>
 <li>进程有3种状态，分别是：<br>1）运行态（该时刻进程实际占用CPU）。<br>2）就绪态（可运行，但因为其他进程正在运行而暂时停止）。<br>3）阻塞态（除非某种外部事件发生，否则进程不能运行）。</li>
 </ul>
+<a id="more"></a>
 <h5 id="2-线程"><a href="#2-线程" class="headerlink" title="2. 线程"></a>2. 线程</h5><ul>
 <li>进程用于把资源集中到一起，而线程是在CUP上被调度的实体。</li>
 <li>线程拥有自己的寄存器，用来保存当前的工作变量，称作线程的上下文。还拥有一个自己的堆栈，用来记录执行历史。</li>
@@ -542,11 +543,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">相册编辑</a>
+                <a href="javascript:void(0)" class="js-tag color1">iOS开发 苹果健康</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">iOS开发 苹果健康</a>
+                <a href="javascript:void(0)" class="js-tag color5">相册编辑</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -558,6 +559,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">折线图</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">行为统计</a>
               </li>
              
@@ -566,15 +571,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">折线图</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">自定义按钮</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">录屏</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -587,6 +584,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">调试</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">录屏</a>
               </li>
             
             <div class="clearfix"></div>

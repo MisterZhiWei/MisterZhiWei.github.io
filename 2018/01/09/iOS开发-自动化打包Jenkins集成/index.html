@@ -57,7 +57,7 @@
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/308319-d7e1f9f0a5a2286c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/308319-3a3f41810cd8f0cd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/308319-e595ae6f062ab8fa.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2018-01-25T05:48:43.000Z">
+<meta property="og:updated_time" content="2018-01-25T07:17:26.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS开发-自动化打包Jenkins集成">
 <meta name="twitter:description" content="前言自动化打包根本目的是为了节约时间，把重复且无技术含量的事情交给机器去做。Jenkins是一个开源软件项目，是基于Java开发的一种持续集成工具，用于监控持续重复的工作，旨在提供一个开放易用的软件平台，使软件的持续集成变成可能。更多的介绍大家自行百度，这里就不啰嗦了。 由于工作需要，我们存在的自动打包的工程有3种，一种是单一的工程打包；一种是集成cocoapod的打包；还有一种是有www文件需">
@@ -201,8 +201,7 @@
       
         <p><img src="http://upload-images.jianshu.io/upload_images/308319-96c21f9ee4b54a42.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
 <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>自动化打包根本目的是为了节约时间，把重复且无技术含量的事情交给机器去做。Jenkins是一个开源软件项目，是基于Java开发的一种持续集成工具，用于监控持续重复的工作，旨在提供一个开放易用的软件平台，使软件的持续集成变成可能。更多的介绍大家自行百度，这里就不啰嗦了。</p>
-<p>由于工作需要，我们存在的自动打包的工程有3种，一种是单一的工程打包；一种是集成cocoapod的打包；还有一种是有www文件需要插入到工程里的打包方式，后边会一一讲到3种配置。</p>
-<p>环境配置：<br>Mac OS 10.12.6<br>Xcode9.2</p>
+<p>由于工作需要，我们存在的自动打包的工程有3种，一种是单一的工程打包；一种是集成cocoapod的打包；还有一种是有www文件需要插入到工程里的打包方式，后边会一一讲到3种配置。<br><a id="more"></a><br>环境配置：<br>Mac OS 10.12.6<br>Xcode9.2</p>
 <h3 id="一、Jenkins安装"><a href="#一、Jenkins安装" class="headerlink" title="一、Jenkins安装"></a>一、Jenkins安装</h3><p>打开<a href="https://jenkins.io" target="_blank" rel="noopener">Jenkins官网</a>下载最新的pkg安装包。安装完成之后，Safari可能会自动打开，如果没有自动打开，打开浏览器，输入<code>http://localhost:8080</code>。</p>
 <p><img src="http://upload-images.jianshu.io/upload_images/308319-160ee31dd6cad753.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
 <p>这时候可能出现这个页面，这个问题的原因就是Java环境有问题，需要重装Java环境。<a href="http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html" target="_blank" rel="noopener">下载Java的JDK</a></p>
@@ -561,11 +560,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">相册编辑</a>
+                <a href="javascript:void(0)" class="js-tag color1">iOS开发 苹果健康</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">iOS开发 苹果健康</a>
+                <a href="javascript:void(0)" class="js-tag color5">相册编辑</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -577,6 +576,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">折线图</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">行为统计</a>
               </li>
              
@@ -585,15 +588,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">折线图</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">自定义按钮</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">录屏</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -606,6 +601,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">调试</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">录屏</a>
               </li>
             
             <div class="clearfix"></div>

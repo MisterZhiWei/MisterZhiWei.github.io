@@ -17,7 +17,7 @@
 <meta property="og:description" content="关于iOS10的报错123Terminating app due to uncaught exception &amp;apos;NSInvalidArgumentException&amp;apos;,reason: &amp;apos;NSHealthUpdateUsageDescription must be set in the app&amp;apos;s Info.plistin order to request">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/308319-240d724cdc91a4c7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2018-01-24T03:56:52.000Z">
+<meta property="og:updated_time" content="2018-01-25T07:19:52.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS开发-关于苹果健康数据的获取">
 <meta name="twitter:description" content="关于iOS10的报错123Terminating app due to uncaught exception &amp;apos;NSInvalidArgumentException&amp;apos;,reason: &amp;apos;NSHealthUpdateUsageDescription must be set in the app&amp;apos;s Info.plistin order to request">
@@ -164,7 +164,7 @@
 </li>
 </ul>
 <p>处理方法：在Info.plist文件中添加关键字<code>NSHealthShareUsageDescription</code>和<code>NSHealthUpdateUsageDescription</code>，写入和读取都需要。iOS10对于涉及用户隐私的很多数据获取都添加了类似的设置，可根据提示在plist文件中添加相应的权限字段。</p>
-<p>在苹果的 iOS8 系统中自带了健康应用，可以记录我们在一天当中的运动数据，比如走了多少步，一天走了或跑了多少公里等。还可以接入硬件设备以写入运动数据，HealthKit框架为苹果为采集各种健康数据源提供的接口，可以用来采集和整合各种健康数据的来源，如运动手环，AppleWatch，以及iPhone设备提供的健康数据。这里简单介绍下如何获取苹果健康的数据。<br>实现流程：</p>
+<p>在苹果的 iOS8 系统中自带了健康应用，可以记录我们在一天当中的运动数据，比如走了多少步，一天走了或跑了多少公里等。还可以接入硬件设备以写入运动数据，HealthKit框架为苹果为采集各种健康数据源提供的接口，可以用来采集和整合各种健康数据的来源，如运动手环，AppleWatch，以及iPhone设备提供的健康数据。这里简单介绍下如何获取苹果健康的数据。<br><a id="more"></a><br>实现流程：</p>
 <h3 id="一、在工程中添加HealthKit库。"><a href="#一、在工程中添加HealthKit库。" class="headerlink" title="一、在工程中添加HealthKit库。"></a>一、在工程中添加HealthKit库。</h3><h3 id="二、创建模型（或在其他模型中添加-import），添加HKHealthStore属性，HKHealthStore是使用HealthKit中关键的一个类。"><a href="#二、创建模型（或在其他模型中添加-import），添加HKHealthStore属性，HKHealthStore是使用HealthKit中关键的一个类。" class="headerlink" title="二、创建模型（或在其他模型中添加#import），添加HKHealthStore属性，HKHealthStore是使用HealthKit中关键的一个类。"></a>二、创建模型（或在其他模型中添加#import），添加HKHealthStore属性，HKHealthStore是使用HealthKit中关键的一个类。</h3><h3 id="三、创建调用方法，在方法实现中主要要做的有3步"><a href="#三、创建调用方法，在方法实现中主要要做的有3步" class="headerlink" title="三、创建调用方法，在方法实现中主要要做的有3步:"></a>三、创建调用方法，在方法实现中主要要做的有3步:</h3><ul>
 <li><p>1、判断设备是否支持HealthKit框架</p>
 </li>
@@ -452,11 +452,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">相册编辑</a>
+                <a href="javascript:void(0)" class="js-tag color1">iOS开发 苹果健康</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">iOS开发 苹果健康</a>
+                <a href="javascript:void(0)" class="js-tag color5">相册编辑</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -468,6 +468,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">折线图</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">行为统计</a>
               </li>
              
@@ -476,15 +480,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">折线图</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">自定义按钮</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">录屏</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -497,6 +493,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">调试</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">录屏</a>
               </li>
             
             <div class="clearfix"></div>

@@ -19,7 +19,7 @@
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/308319-b6a1a5d280ea7408.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/308319-7d39abd590473d1f.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/308319-b520837f92f1a8ed.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2018-01-25T02:45:43.000Z">
+<meta property="og:updated_time" content="2018-01-25T07:18:33.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS开发-iWatch通知中心快捷回复实现">
 <meta name="twitter:description" content="iWatch同步接收连接手机的通知，查看起来非常方便。像微信这种及时通讯消息的通知还有快捷回复，更方便。接下来就说说如何实现在iWatch的通知中心实现信息的快捷回复。 要实现这一功能需要iOS10以上系统，因为用到了UserNotifications framework这个框架。UserNotifications framework让开发者可以更多样的实现通知界面。详细使用可查看这篇文章。 实现">
@@ -163,7 +163,7 @@
       
         <p>iWatch同步接收连接手机的通知，查看起来非常方便。像微信这种及时通讯消息的通知还有快捷回复，更方便。接下来就说说如何实现在iWatch的通知中心实现信息的快捷回复。</p>
 <p>要实现这一功能需要iOS10以上系统，因为用到了<code>UserNotifications framework</code>这个框架。<code>UserNotifications framework</code>让开发者可以更多样的实现通知界面。详细使用可查看<a href="http://www.jianshu.com/p/b74e52e866fc" target="_blank" rel="noopener">这篇文章</a>。</p>
-<p>实现这一功能主要有3步：<br>1&gt;注册自定义通知操作类型<br>2&gt;请求本地和远程通知的交互操作授权<br>3&gt;接收到自定义的通知时实现自定义操作</p>
+<p>实现这一功能主要有3步：<br>1&gt;注册自定义通知操作类型<br>2&gt;请求本地和远程通知的交互操作授权<br>3&gt;接收到自定义的通知时实现自定义操作<br><a id="more"></a></p>
 <h3 id="一、注册自定义通知操作类型"><a href="#一、注册自定义通知操作类型" class="headerlink" title="一、注册自定义通知操作类型"></a>一、注册自定义通知操作类型</h3><p>在程序入口方法<code>- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions</code>中注册自定义操作。为了代码整洁这部分功能做了封装，封装为一个<code>NotificationHandle</code>类。</p>
 <p>在<code>NotificationHandle</code>类 的<code>registerNotificationCategory</code>方法中做了注册自定义操作，代码如下。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">//注册通知中的action事件</span><br><span class="line">-(void)registerNotificationCategory&#123;</span><br><span class="line">//带回复的通知事件注册</span><br><span class="line">UNTextInputNotificationAction *replyAction = [UNTextInputNotificationAction actionWithIdentifier:@&quot;replyClick&quot; title:@&quot;回复&quot; options:UNNotificationActionOptionAuthenticationRequired textInputButtonTitle:@&quot;发送&quot; textInputPlaceholder:@&quot;请输入评论内容..&quot;];</span><br><span class="line"></span><br><span class="line">UNNotificationCategory *tapCategory = [UNNotificationCategory categoryWithIdentifier:@&quot;reply&quot; actions:@[replyAction] intentIdentifiers:@[] options:UNNotificationCategoryOptionCustomDismissAction];</span><br><span class="line"></span><br><span class="line">NSSet *set = [[NSSet alloc]initWithObjects:tapCategory, nil];</span><br><span class="line">[[UNUserNotificationCenter currentNotificationCenter] setNotificationCategories:set];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p><img src="http://upload-images.jianshu.io/upload_images/308319-b6a1a5d280ea7408.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="通知事件注册.png"></p>
@@ -435,11 +435,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">相册编辑</a>
+                <a href="javascript:void(0)" class="js-tag color1">iOS开发 苹果健康</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">iOS开发 苹果健康</a>
+                <a href="javascript:void(0)" class="js-tag color5">相册编辑</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -451,6 +451,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">折线图</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">行为统计</a>
               </li>
              
@@ -459,15 +463,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">折线图</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">自定义按钮</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">录屏</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -480,6 +476,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">调试</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">录屏</a>
               </li>
             
             <div class="clearfix"></div>

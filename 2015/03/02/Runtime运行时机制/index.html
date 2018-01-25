@@ -19,7 +19,7 @@
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/308319-7c6655e04b10d3ff.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/308319-9982b9792794e9b1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/308319-bccb3f7467fc0ade.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2018-01-25T02:32:04.000Z">
+<meta property="og:updated_time" content="2018-01-25T07:21:26.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Runtime运行时机制">
 <meta name="twitter:description" content="想深入理解Objective-C这门动态语言就不得不深入理解下它的“动态”是如何实现的。早先拜读过《Effective Objective-C 2.0》就让我更深入的窥探到OC运行时特别之处，本文当中也有部分内容借鉴自这本经典著作。第四届互联网大会的项目也完成了，年底闲来无事整理写些总结。 动态语言是相对于静态语言如C语言区别而言的。C语言在编译期就能决定了运行时应该调用的函数，函数地址实际上是硬">
@@ -162,8 +162,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>想深入理解Objective-C这门动态语言就不得不深入理解下它的“动态”是如何实现的。早先拜读过《Effective Objective-C 2.0》就让我更深入的窥探到OC运行时特别之处，本文当中也有部分内容借鉴自这本经典著作。第四届互联网大会的项目也完成了，年底闲来无事整理写些总结。</p>
-<p>动态语言是相对于静态语言如C语言区别而言的。C语言在编译期就能决定了运行时应该调用的函数，函数地址实际上是硬编码在指令之中的。而OC在编译期甚至不知道对象的类型，需要在运行时处理，当然它的底层也都是转化为C函数调用。运行时实际上决定了OC最终的编程实现，即什么类的对象执行什么函数，而且这个执行调用是可以修改的，这也是运行时吸引人的地方。</p>
-<p>运行时的调用有3种方式</p>
+<p>动态语言是相对于静态语言如C语言区别而言的。C语言在编译期就能决定了运行时应该调用的函数，函数地址实际上是硬编码在指令之中的。而OC在编译期甚至不知道对象的类型，需要在运行时处理，当然它的底层也都是转化为C函数调用。运行时实际上决定了OC最终的编程实现，即什么类的对象执行什么函数，而且这个执行调用是可以修改的，这也是运行时吸引人的地方。<br><a id="more"></a><br>运行时的调用有3种方式</p>
 <ul>
 <li>第一种是系统底层封装实现的，所有OC的代码就会调用，那就是<code>消息传递</code>机制。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">id value = [someObj methodName:parameter];</span><br><span class="line">// 编译期OC转化为标准C函数</span><br><span class="line">id value = objc_msgSend(someObj,@selector(methodName:),parameter);</span><br></pre></td></tr></table></figure>
 </li>
@@ -473,11 +472,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">相册编辑</a>
+                <a href="javascript:void(0)" class="js-tag color1">iOS开发 苹果健康</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">iOS开发 苹果健康</a>
+                <a href="javascript:void(0)" class="js-tag color5">相册编辑</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -489,6 +488,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">折线图</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">行为统计</a>
               </li>
              
@@ -497,15 +500,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">折线图</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">自定义按钮</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">录屏</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -518,6 +513,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">调试</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">录屏</a>
               </li>
             
             <div class="clearfix"></div>

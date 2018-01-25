@@ -8,21 +8,21 @@
   <link rel="dns-prefetch" href="http://yoursite.com">
   <title>The executable was signed with invalid entitlements.的解决 | zwBlog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="有时运行下载的工程会有The executable was signed with invalid entitlements.提示  一般的解决方案是到Xcode工程中TARGET -&amp;gt; Build Settings -&amp;gt; Code Signing Entitlements删除内容 或者再在工程目录中找到后缀.entitlements的文件，删除所有字段值 一般来说这样能解决大部分问题">
+  <meta name="description" content="有时运行下载的工程会有The executable was signed with invalid entitlements.提示">
 <meta name="keywords" content="报错">
 <meta property="og:type" content="article">
 <meta property="og:title" content="The executable was signed with invalid entitlements.的解决">
 <meta property="og:url" content="http://yoursite.com/2017/04/14/The-executable-was-signed-with-invalid-entitlements-的解决/index.html">
 <meta property="og:site_name" content="zwBlog">
-<meta property="og:description" content="有时运行下载的工程会有The executable was signed with invalid entitlements.提示  一般的解决方案是到Xcode工程中TARGET -&amp;gt; Build Settings -&amp;gt; Code Signing Entitlements删除内容 或者再在工程目录中找到后缀.entitlements的文件，删除所有字段值 一般来说这样能解决大部分问题">
+<meta property="og:description" content="有时运行下载的工程会有The executable was signed with invalid entitlements.提示">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/308319-9c914ad0734f5135.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/308319-79dfd5309a4c04cc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/308319-93fdeda2394eb501.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2018-01-25T05:50:16.000Z">
+<meta property="og:updated_time" content="2018-01-25T07:21:49.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="The executable was signed with invalid entitlements.的解决">
-<meta name="twitter:description" content="有时运行下载的工程会有The executable was signed with invalid entitlements.提示  一般的解决方案是到Xcode工程中TARGET -&amp;gt; Build Settings -&amp;gt; Code Signing Entitlements删除内容 或者再在工程目录中找到后缀.entitlements的文件，删除所有字段值 一般来说这样能解决大部分问题">
+<meta name="twitter:description" content="有时运行下载的工程会有The executable was signed with invalid entitlements.提示">
 <meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/308319-9c914ad0734f5135.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
   
     <link rel="alternative" href="/atom.xml" title="zwBlog" type="application/atom+xml">
@@ -162,8 +162,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>有时运行下载的工程会有The executable was signed with invalid entitlements.提示</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/308319-9c914ad0734f5135.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="提示图.png"></p>
-<p>一般的解决方案是到Xcode工程中TARGET -&gt; Build Settings -&gt; Code Signing Entitlements删除内容<br><img src="http://upload-images.jianshu.io/upload_images/308319-79dfd5309a4c04cc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="截图.png"></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/308319-9c914ad0734f5135.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="提示图.png"><br><a id="more"></a><br>一般的解决方案是到Xcode工程中TARGET -&gt; Build Settings -&gt; Code Signing Entitlements删除内容<br><img src="http://upload-images.jianshu.io/upload_images/308319-79dfd5309a4c04cc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="截图.png"></p>
 <p>或者再在工程目录中找到后缀.entitlements的文件，删除所有字段值<br><img src="http://upload-images.jianshu.io/upload_images/308319-93fdeda2394eb501.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="截图.png"></p>
 <p>一般来说这样能解决大部分问题，然而笔者遇到的问题就不一样了，最近开发需要集成深信服的VPN，并且需要用L3VPN模式，而他们是用应用程序扩展实现的SDK，所以需要两个证书，扩展部分的签名证书ID是主程序证书ID的字段扩展（比如主程序的证书ID是com.jianshu.ios；那么扩展程序的证书则必须是com.jianshu.ios.xxxx），而启用VPN功能的扩展证书申请时需要勾选Network Extension功能，当时没看到说明，结果就一直报上边的权限提示。后来勾上后重新生成证书就解决了。 关于应用程序扩展请参阅App Extension编程指南（iOS8/OS X v10.10）：创建应用扩展(<a href="http://www.cocoachina.com/ios/20140812/9366.html" target="_blank" rel="noopener">中文</a>,<a href="https://developer.apple.com/library/content/documentation/General/Conceptual/ExtensibilityPG/ExtensionCreation.html#//apple_ref/doc/uid/TP40014214-CH5-SW1" target="_blank" rel="noopener">英文</a>)</p>
 
@@ -428,11 +427,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">相册编辑</a>
+                <a href="javascript:void(0)" class="js-tag color1">iOS开发 苹果健康</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">iOS开发 苹果健康</a>
+                <a href="javascript:void(0)" class="js-tag color5">相册编辑</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -444,6 +443,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">折线图</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">行为统计</a>
               </li>
              
@@ -452,15 +455,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">折线图</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">自定义按钮</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">录屏</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -473,6 +468,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">调试</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">录屏</a>
               </li>
             
             <div class="clearfix"></div>
