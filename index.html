@@ -137,31 +137,135 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-The-executable-was-signed-with-invalid-entitlements-的解决" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-iOS开发-自动化打包Jenkins集成" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/01/25/The-executable-was-signed-with-invalid-entitlements-的解决/">The executable was signed with invalid entitlements.的解决</a>
+      <a class="article-title" href="/2018/01/09/iOS开发-自动化打包Jenkins集成/">iOS开发-自动化打包Jenkins集成</a>
     </h1>
   
 
         
-        <a href="/2018/01/25/The-executable-was-signed-with-invalid-entitlements-的解决/" class="archive-article-date">
-  	<time datetime="2018-01-25T02:21:12.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-01-25</time>
+        <a href="/2018/01/09/iOS开发-自动化打包Jenkins集成/" class="archive-article-date">
+  	<time datetime="2018-01-09T05:44:56.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-01-09</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>有时运行下载的工程会有The executable was signed with invalid entitlements.提示</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/308319-9c914ad0734f5135.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="提示图.png"></p>
-<p>一般的解决方案是到Xcode工程中TARGET -&gt; Build Settings -&gt; Code Signing Entitlements删除内容<br><img src="http://upload-images.jianshu.io/upload_images/308319-79dfd5309a4c04cc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="截图.png"></p>
-<p>或者再在工程目录中找到后缀.entitlements的文件，删除所有字段值<br><img src="http://upload-images.jianshu.io/upload_images/308319-93fdeda2394eb501.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="截图.png"></p>
-<p>一般来说这样能解决大部分问题，然而笔者遇到的问题就不一样了，最近开发需要集成深信服的VPN，并且需要用L3VPN模式，而他们是用应用程序扩展实现的SDK，所以需要两个证书，扩展部分的签名证书ID是主程序证书ID的字段扩展（比如主程序的证书ID是com.jianshu.ios；那么扩展程序的证书则必须是com.jianshu.ios.xxxx），而启用VPN功能的扩展证书申请时需要勾选Network Extension功能，当时没看到说明，结果就一直报上边的权限提示。后来勾上后重新生成证书就解决了。 关于应用程序扩展请参阅App Extension编程指南（iOS8/OS X v10.10）：创建应用扩展(<a href="http://www.cocoachina.com/ios/20140812/9366.html" target="_blank" rel="noopener">中文</a>,<a href="https://developer.apple.com/library/content/documentation/General/Conceptual/ExtensibilityPG/ExtensionCreation.html#//apple_ref/doc/uid/TP40014214-CH5-SW1" target="_blank" rel="noopener">英文</a>)</p>
+        <p><img src="http://upload-images.jianshu.io/upload_images/308319-96c21f9ee4b54a42.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>自动化打包根本目的是为了节约时间，把重复且无技术含量的事情交给机器去做。Jenkins是一个开源软件项目，是基于Java开发的一种持续集成工具，用于监控持续重复的工作，旨在提供一个开放易用的软件平台，使软件的持续集成变成可能。更多的介绍大家自行百度，这里就不啰嗦了。</p>
+<p>由于工作需要，我们存在的自动打包的工程有3种，一种是单一的工程打包；一种是集成cocoapod的打包；还有一种是有www文件需要插入到工程里的打包方式，后边会一一讲到3种配置。</p>
+<p>环境配置：<br>Mac OS 10.12.6<br>Xcode9.2</p>
+<h3 id="一、Jenkins安装"><a href="#一、Jenkins安装" class="headerlink" title="一、Jenkins安装"></a>一、Jenkins安装</h3><p>打开<a href="https://jenkins.io" target="_blank" rel="noopener">Jenkins官网</a>下载最新的pkg安装包。安装完成之后，Safari可能会自动打开，如果没有自动打开，打开浏览器，输入<code>http://localhost:8080</code>。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/308319-160ee31dd6cad753.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>这时候可能出现这个页面，这个问题的原因就是Java环境有问题，需要重装Java环境。<a href="http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html" target="_blank" rel="noopener">下载Java的JDK</a></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/308319-90b476898e490109.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""><br>一般会有2个版本可选，选一个下载即可，下载完安装后打开终端，cd进入到jenkins.war包所在目录，执行以下命令：<br><code>$ java -jar jenkins.war --httpPort=8080</code><br>httpPort指的就是Jenkins所使用的http端口，这里指定8080(默认的就是这个)，可根据具体情况来修改。待Jenkins启动后，在浏览器页面输入以下地址:<code>http://localhost:8080</code>这样就可以打开Jenkins管理页面了。</p>
+<h4 id="接下来是我们遇到的第一个坑也是需要注意的地方。"><a href="#接下来是我们遇到的第一个坑也是需要注意的地方。" class="headerlink" title="接下来是我们遇到的第一个坑也是需要注意的地方。"></a>接下来是我们遇到的第一个坑也是需要注意的地方。</h4><p>一般来说浏览器直接打开<code>http://localhost:8080</code>并没什么不对，但是等你用Jenkins打包的时候你会发现有各种权限的报错问题。原因就是直接用浏览器打开创建账号，那么Jenkins的工作目录会建立在/Users/Shared/Jenkins下。具体过程参见 <a href="http://stackoverflow.com/questions/9245149/jenkins-on-os-x-xcodebuild-gives-code-sign-error" target="_blank" rel="noopener">stackoverflow</a>。<br>正确的启动方式是：<br><code>$ sudo launchctl unload /Library/LaunchDaemaons/org.jenkins-ci.plist</code><br><code>$  java -jar /Applications/Jenkins/jenkins.war --httpPort=8080</code><br>这时，Jenkies会在/Users/[user name]/.Jenkins 下面建立工作目录，从而它就有权限去获取相关的keychain。<code>.Jenkins</code>是一个隐藏文件，通过进入文件夹路径的方式查看或者显示隐藏文件查看。<br><code>$ defaults write com.apple.finder AppleShowAllFiles -bool true</code>    此命令显示隐藏文件<br><code>$ defaults write com.apple.finder AppleShowAllFiles -bool false</code>  此命令关闭显示隐藏文件<br>执行显示或隐藏命令后需要重新启动Finder即可执行。</p>
+<p>此时你可能会遇到<code>/Library/LaunchDaemaons/org.jenkins-ci.plist: No such file or directory</code>这样的报错信息，但你用Finder打开路径是有这个文件的，然后你copy文件的路径发现就是这个路径，此时你再去执行<br><code>$ sudo launchctl unload /Library/LaunchDaemaons/org.jenkins-ci.plist</code><br>就会提示你deny permission，需要输入密码，这时就正常了。</p>
+<p>输入<code>$ java -jar /Applications/Jenkins/jenkins.war --httpPort=8080</code>之后如果出现下边的信息就标识Jenkins已经启动了。<br><img src="http://upload-images.jianshu.io/upload_images/308319-d4ab5ca2224989c8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>此时在浏览器输入<code>http://localhost:8080</code>即可。</p>
+<h4 id="注意：这种方式打开的Jenkins在自动化打包时，不能关闭运行Java环境的终端。"><a href="#注意：这种方式打开的Jenkins在自动化打包时，不能关闭运行Java环境的终端。" class="headerlink" title="注意：这种方式打开的Jenkins在自动化打包时，不能关闭运行Java环境的终端。"></a>注意：这种方式打开的Jenkins在自动化打包时，不能关闭运行Java环境的终端。</h4><h3 id="二、Jenkins账号设置"><a href="#二、Jenkins账号设置" class="headerlink" title="二、Jenkins账号设置"></a>二、Jenkins账号设置</h3><p>如果Jenkins安装完是用浏览器直接打开<code>http://localhost:8080</code>，那么应该是如下的显示界面。<br><img src="http://upload-images.jianshu.io/upload_images/308319-bbab702aa28a8e41.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1194012-c8468fd91737f725.png"></p>
+<p>红色的路径就是让我们找到密码的路径，如果是通过命令行输入后浏览器打开地址，那么红色的提示路径就会是<code>/Users/[user name]/.Jenkins/.......</code>就表明Jenkins在当前的登录账号下建立了工作目录，之后会省去很多麻烦。<br>按路径打开时发现secrets文件夹无权限访问，右键点击文件夹 -&gt; 显示简介 -&gt; 打开共享与权限 ，给everyone加上读与写权限，进入文件夹后可以看到名字为initialAdminPassword的文件。<br><img src="http://upload-images.jianshu.io/upload_images/308319-a4b80b3ec2a27eeb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>这个文件夹也有权限问题，按上边的操作修改下权限即可，打开后可以拷贝里边的密码，然后在Jenkins页面上输入即可。</p>
+<p>然后点击install suggested plugins ，即下载推荐插件。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/308319-72215120c022c2cb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/308319-491f2247a2dbaf9c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/308319-b497a493547427f2.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>到这就可以设置用户名和密码了。<br><img src="http://upload-images.jianshu.io/upload_images/308319-02cafed5111ff020.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/308319-595ed579a27faaa8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h3 id="三、安装插件及添加钥匙串和描述文件等准备"><a href="#三、安装插件及添加钥匙串和描述文件等准备" class="headerlink" title="三、安装插件及添加钥匙串和描述文件等准备"></a>三、安装插件及添加钥匙串和描述文件等准备</h3><p>因为我们用的是GitLab来管理源代码，Jenkins本身并没有自带GitLab插件，所以我们需要依次选择 系统管理-&gt;管理插件，在“可选插件”中选中“GitLab Plugin”和“Gitlab Hook Plugin”这两项，然后安装。</p>
+<p>如果你想用Xcode插件作为配置打包任务可以下载 xcode integration插件，下载方式也是系统管理-&gt;管理插件，在“可选插件”中搜索下载。不过我还是偏向与脚本的方式，因为脚本虽然麻烦些但是更加灵活。比如我们打包的命名方式，打完包的存放文件路径等都可以通过脚本做配置。</p>
+<p>自动打包的job任务配置也需要添加钥匙串和描述文件，这时需要安装Keychains and Provisioning Profiles Management插件，安装后在Jenkins首页点击系统管理会找到这个插件，点击进去。<br><img src="http://upload-images.jianshu.io/upload_images/308319-80bc0325c7e155ba.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/308319-49c0ac3e328d99d1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>如图这里可以上传的文件时钥匙串和描述文件。不能直接上传证书文件。钥匙串的目录可以打开钥匙串点击<code>登录</code>钥匙串查看。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/308319-6c7d2819716c2806.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>按图索骥，按显示的路径通过Finder直接打开文件夹。<br><img src="http://upload-images.jianshu.io/upload_images/308319-0f70206ebc74a624.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>然后拷贝一份安装有我们打包证书的钥匙串文件，即login.keychain-db。此时需要注意，上传到Jenkins的只认<code>.keychain</code>后缀和<code>.mobileprovision</code>后缀的文件，其他文件都会上传失败。所以我们要把这个上传的钥匙串后缀的<code>-db</code>去掉，文件名修改成login.keychain，然后再上传。</p>
+<p>上传成功后Keychains下边会显示Filename为login.keychain，可以添加打包用的证书。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/308319-681f801c5f381691.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>这个名字可以在钥匙串中点击查看。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/308319-f8f1f66189dfa0d8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>接下来添加描述文件，先添加描述文件的导向路径，<br><code>/Users/[user name]/Library/MobileDevice/Provisioning Profiles</code><br>。描述文件和钥匙串一样的添加上传方式。添加后就可以看到描述文件信息了。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/308319-4072fb3458020d6c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>上传后点击 save 按钮保存就可以了。</p>
+<h3 id="四、创建配置单一工程任务"><a href="#四、创建配置单一工程任务" class="headerlink" title="四、创建配置单一工程任务"></a>四、创建配置单一工程任务</h3><p>xcodebuild + xcrun命令<br>Xcode提供了一套构建打包的命令，就是xcodebuild和xcrun命令。xcodebuild把我们指定的任务打包成.app文件，xcrun将指定的.app文件转换为对应的.ipa文件。<br><a href="https://developer.apple.com/legacy/library/documentation/Darwin/Reference/ManPages/man1/xcodebuild.1.html" target="_blank" rel="noopener">xcodebuild官方文档</a>  和<a href="https://developer.apple.com/library/mac/documentation/Darwin/Reference/ManPages/man1/xcrun.1.html" target="_blank" rel="noopener">xcrun官方文档</a></p>
+<p>接下来创建任务，Jenkins首页点击新建。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/308319-88a2212c863da19e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>如果我们已经创建了任务，并且其他配置都一样就改个证书什么的，可以下滑看到可以复制一份现有的任务，输入名字就可以选择。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/308319-e9abae826e538bf8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>新建任务打开后，因为我们是用SVN管理代码，所以选Subversion。<br><img src="http://upload-images.jianshu.io/upload_images/308319-d028a44c1300eec3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/308319-9b495f6866548053.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/308319-2a794ec639134b01.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""><br>点击add添加SVN的账号和密码。</p>
+<p>如果地址和账号密码都对，是这样的。<br><img src="http://upload-images.jianshu.io/upload_images/308319-30121ccbc5b8aba8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>路径不对，或账号密码不对。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/308319-10237d3047cd6221.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h4 id="有两个自动化的配置比较重要："><a href="#有两个自动化的配置比较重要：" class="headerlink" title="有两个自动化的配置比较重要："></a>有两个自动化的配置比较重要：</h4><p>Poll SCM (poll source code management) 轮询源码管理<br>需要设置源码的路径才能起到轮询的效果。一般设置为类似结果： 0/5 <em> </em> <em> </em> 每5分钟轮询一次<br>Build periodically (定时build)<br>一般设置为类似： 00 20 <em> </em> * 每天 20点执行定时build 。当然两者的设置都是一样可以通用的。</p>
+<p>详细的可以点开介绍查看。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/308319-58c07a846775b8cc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>然后选择打包证书和描述文件。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/308319-23d691754fcd3b08.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>添加脚本</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/308319-aa003774ff94de9c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"># 工程名</span><br><span class="line">TARGET_NAME=&quot;VideoEditDemo&quot;</span><br><span class="line"></span><br><span class="line"># 文件名前缀</span><br><span class="line">APP_NAME=&quot;视频编辑&quot;</span><br><span class="line"></span><br><span class="line"># 证书</span><br><span class="line">CODE_SIGN_DISTRIBUTION=&quot;iPhone Distribution: Smao Tech Co.,LTD.&quot;</span><br><span class="line"># info.plist路径</span><br><span class="line">project_infoplist_path=&quot;./$&#123;TARGET_NAME&#125;/Info.plist&quot;</span><br><span class="line"></span><br><span class="line">#取版本号</span><br><span class="line">bundleShortVersion=$(/usr/libexec/PlistBuddy -c &quot;print CFBundleShortVersionString&quot; &quot;$&#123;project_infoplist_path&#125;&quot;)</span><br><span class="line"></span><br><span class="line">#取build值</span><br><span class="line">bundleVersion=$(/usr/libexec/PlistBuddy -c &quot;print CFBundleVersion&quot; &quot;$&#123;project_infoplist_path&#125;&quot;)</span><br><span class="line"></span><br><span class="line">DATE=&quot;$(date +%Y%m%d)&quot;</span><br><span class="line">IPANAME=&quot;$&#123;APP_NAME&#125;_V$&#123;bundleShortVersion&#125;_$&#123;DATE&#125;.ipa&quot;</span><br><span class="line"></span><br><span class="line">#要上传的ipa文件路径</span><br><span class="line">IPA_PATH=&quot;$HOME/Desktop/MyWorkPlace/自动化打包IPAs/$&#123;IPANAME&#125;&quot;</span><br><span class="line">echo $&#123;IPA_PATH&#125;</span><br><span class="line">echo &quot;$&#123;IPA_PATH&#125;&quot;&gt;&gt; text.txt</span><br><span class="line"></span><br><span class="line">#下面2行是没有Cocopods的用法</span><br><span class="line">echo &quot;=================clean=================&quot;</span><br><span class="line">xcodebuild -target &quot;$&#123;TARGET_NAME&#125;&quot;  -configuration &apos;Release&apos; clean</span><br><span class="line"></span><br><span class="line">echo &quot;+++++++++++++++++build+++++++++++++++++&quot;</span><br><span class="line">xcodebuild -target &quot;$&#123;TARGET_NAME&#125;&quot; -sdk iphoneos -configuration &apos;Release&apos;  CODE_SIGN_IDENTITY=&quot;$&#123;CODE_SIGN_DISTRIBUTION&#125;&quot; SYMROOT=&apos;$(PWD)&apos;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">xcrun -sdk iphoneos PackageApplication &quot;./Release-iphoneos/$&#123;TARGET_NAME&#125;.app&quot; -o ~/&quot;Desktop/MyWorkPlace/自动化打包IPAs/$&#123;IPANAME&#125;&quot;</span><br></pre></td></tr></table></figure>
+<p>要上传的ipa文件路径是我创建了一个文件夹专门用来放自动打包的。</p>
+<p>构建一次，各个颜色代表的意义如下：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/308319-72974b45f111e71a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>天气的晴雨表代表了任务的质量，这也是Jenkins的一个特色。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/308319-4530aadf1bc7a2fb.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>如果构建失败了，可以去查看Console Output可以查看log日志。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/308319-625e6f486ce18f2f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>到此，一个单一工程的自动化打包就配置好了。这时可以点应用  保存  ，然后点击构建，构建成功后可以点开存放ipa文件的文件夹找到对应的ipa安装包。</p>
+<h3 id="五、配置cocoapod任务"><a href="#五、配置cocoapod任务" class="headerlink" title="五、配置cocoapod任务"></a>五、配置cocoapod任务</h3><p>这里为了不重复，只说与单一工程不同的地方。cocoapod需要install安装依赖的三方库，所以这里需要在原有的构建脚本前边加一个脚本。（cocoapod自动化打包install安装三方库速度特别慢，还有可能中途下载时间太长失败，重新点构建再试一般就没问题了）</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/308319-ee5ac1075af6ba6b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">#bin/bsah - l</span><br><span class="line"></span><br><span class="line">export LANG=en_US.UTF-8</span><br><span class="line"></span><br><span class="line">export LANGUAGE=en_US.UTF-8</span><br><span class="line"></span><br><span class="line">export LC_ALL=en_US.UTF-8</span><br><span class="line"></span><br><span class="line">cd 【你的工程目录】</span><br><span class="line"></span><br><span class="line">/usr/local/bin/pod install --verbose --no-repo-update</span><br></pre></td></tr></table></figure>
+<p>第二个脚本也需要有些修改<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"># 工程名</span><br><span class="line">TARGET_NAME=&quot;MeetingProject&quot;</span><br><span class="line"></span><br><span class="line"># 文件名前缀</span><br><span class="line">APP_NAME=&quot;会务产品&quot;</span><br><span class="line"></span><br><span class="line"># 证书</span><br><span class="line">CODE_SIGN_DISTRIBUTION=&quot;iPhone Distribution: Smartdot Technologies Co.,LTD.&quot;</span><br><span class="line"># info.plist路径</span><br><span class="line">project_infoplist_path=&quot;./$&#123;TARGET_NAME&#125;/Info.plist&quot;</span><br><span class="line"></span><br><span class="line">#取版本号</span><br><span class="line">bundleShortVersion=$(/usr/libexec/PlistBuddy -c &quot;print CFBundleShortVersionString&quot; &quot;$&#123;project_infoplist_path&#125;&quot;)</span><br><span class="line"></span><br><span class="line">#取build值</span><br><span class="line">bundleVersion=$(/usr/libexec/PlistBuddy -c &quot;print CFBundleVersion&quot; &quot;$&#123;project_infoplist_path&#125;&quot;)</span><br><span class="line"></span><br><span class="line">DATE=&quot;$(date +%Y%m%d)&quot;</span><br><span class="line">IPANAME=&quot;$&#123;APP_NAME&#125;_V$&#123;bundleShortVersion&#125;_$&#123;DATE&#125;.ipa&quot;</span><br><span class="line"></span><br><span class="line">#要上传的ipa文件路径</span><br><span class="line">IPA_PATH=&quot;$HOME/Desktop/MyWorkPlace/自动化打包IPAs/$&#123;IPANAME&#125;&quot;</span><br><span class="line">echo $&#123;IPA_PATH&#125;</span><br><span class="line">echo &quot;$&#123;IPA_PATH&#125;&quot;&gt;&gt; text.txt</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#下面2行是集成有Cocopods的用法</span><br><span class="line">echo &quot;=================clean=================&quot;</span><br><span class="line">xcodebuild -workspace &quot;$&#123;TARGET_NAME&#125;.xcworkspace&quot; -scheme &quot;$&#123;TARGET_NAME&#125;&quot;  -configuration &apos;Release&apos; clean</span><br><span class="line"></span><br><span class="line">echo &quot;+++++++++++++++++build+++++++++++++++++&quot;</span><br><span class="line">xcodebuild -workspace &quot;$&#123;TARGET_NAME&#125;.xcworkspace&quot; -scheme &quot;$&#123;TARGET_NAME&#125;&quot; -sdk iphoneos -configuration &apos;Release&apos; CODE_SIGN_IDENTITY=&quot;$&#123;CODE_SIGN_DISTRIBUTION&#125;&quot; SYMROOT=&apos;$(PWD)&apos;</span><br><span class="line"></span><br><span class="line">xcrun -sdk iphoneos PackageApplication &quot;./Release-iphoneos/$&#123;TARGET_NAME&#125;.app&quot; -o ~/&quot;Desktop/MyWorkPlace/自动化打包IPAs/$&#123;IPANAME&#125;&quot;</span><br></pre></td></tr></table></figure></p>
+<p>此时你构建打包，应该会报这样的错</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/308319-1098061c38563d29.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>这是因为Jenkins没有安装cocoapod，打开用户偏好设置 -&gt; 用户与群组。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/308319-6e27a72e96c1ff03.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>正常这里不会有Jenkins这个名字，除非你设置过。这里是我已经给Jenkins设置过了，右键点击高级选项，把名字写上。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/308319-1ed99c562205e107.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>我们需要给Jenkins一个密码，如果之前没设置过密码，这里应该是更改密码，否则是重置密码。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/308319-5b4ecce56084da9a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>为了可以快速切换登录账号，我们需要这样的勾选。<br><img src="http://upload-images.jianshu.io/upload_images/308319-22ffca2a71592b7c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>然后可以在这里快速切换登录用户，接下来就可以切换登录Jenkins账号，安装cocoapod环境了，安装完成后，cocoapod自动化打包就没什么问题了。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/308319-3f39fa64ee4f2ac3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h3 id="六、配置插入文件打包任务"><a href="#六、配置插入文件打包任务" class="headerlink" title="六、配置插入文件打包任务"></a>六、配置插入文件打包任务</h3><p>添加SVN地址，这里因为我们SVN这个目录下的文件就为WWW，所以复制过来也要建立一个www文件夹放这些文件，否则这些文件就直接复制到工程目录一级目录下非常散乱。<br><img src="http://upload-images.jianshu.io/upload_images/308319-d7e1f9f0a5a2286c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>有插入文件，自然需要在打包的时候插入进去，所以我们还需要在构建单一工程的脚本前加一段脚本。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/308319-3a3f41810cd8f0cd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line"></span><br><span class="line"># Copyright by Galen (2014-2014)</span><br><span class="line"># All rights reserved</span><br><span class="line"></span><br><span class="line">APP=`find -L . -name *.app -type d`</span><br><span class="line">echo &quot;will cp source file to:&quot;$APP&quot;...&quot;</span><br><span class="line">#exit 1</span><br><span class="line">\cp -aR $WORKSPACE/www &quot;$APP&quot;</span><br><span class="line"></span><br><span class="line"># 删除隐藏文件</span><br><span class="line">for X in `find -L &quot;$APP&quot; -name *.svn*`</span><br><span class="line">do</span><br><span class="line">rm -rf &quot;$X&quot;</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+<h3 id="七、上传蒲公英应用管理平台"><a href="#七、上传蒲公英应用管理平台" class="headerlink" title="七、上传蒲公英应用管理平台"></a>七、上传蒲公英应用管理平台</h3><p>我们既然要自动化就自动化到底，所以我们打出来的安装包应该自动上传到一个应用管理平台，这样别人就可以直接下载测试或使用。一般常用的是上传到蒲公英应用管理平台。</p>
+<h4 id="1-安装fir-clifir的命令行工具，需要先装好ruby再执行"><a href="#1-安装fir-clifir的命令行工具，需要先装好ruby再执行" class="headerlink" title="1.安装fir-clifir的命令行工具，需要先装好ruby再执行"></a>1.安装fir-clifir的命令行工具，需要先装好ruby再执行</h4><p><code>gem install fir-cli</code></p>
+<h4 id="2-自动上传至蒲公英"><a href="#2-自动上传至蒲公英" class="headerlink" title="2.自动上传至蒲公英"></a>2.自动上传至蒲公英</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">#蒲公英上的User Key</span><br><span class="line">uKey=&quot;9dba14768e*****8e7a606ea31e04&quot;</span><br><span class="line">#蒲公英上的API Key</span><br><span class="line">apiKey=&quot;88127f49b2******e9536babe6920c10&quot;</span><br><span class="line">#要上传的ipa文件路径</span><br><span class="line"></span><br><span class="line">#要上传的ipa文件路径</span><br><span class="line">IPA_PATH=$(cat text.txt)</span><br><span class="line"></span><br><span class="line">rm -rf text.txt</span><br><span class="line"></span><br><span class="line">#执行上传至蒲公英的命令</span><br><span class="line">echo &quot;++++++++++++++上传蒲公英 上传中 +++++++++++++&quot;</span><br><span class="line">curl -F &quot;file=@$&#123;IPA_PATH&#125;&quot; -F &quot;uKey=$&#123;uKey&#125;&quot; -F &quot;_api_key=$&#123;apiKey&#125;&quot; http://www.pgyer.com/apiv1/app/upload</span><br></pre></td></tr></table></figure>
+<h3 id="八、过程中一些坑和小技巧"><a href="#八、过程中一些坑和小技巧" class="headerlink" title="八、过程中一些坑和小技巧"></a>八、过程中一些坑和小技巧</h3><ul>
+<li>1.Jenkins工作目录不在当前登录用户下的权限问题<br>这个问题在最开始就说了，这里的报错只是其中的个别，还有其他提示的权限问题基本都是Jenkins工作目录引起的权限问题。当然，你可以点开对应的路径下的文件进行授权，但是这意味着路径上的每一个文件都需要这样的授权处理，并且报一次错就得来这么一轮，我们不可能这么操作。<h4 id="所以工作目录的问题其实很重要。"><a href="#所以工作目录的问题其实很重要。" class="headerlink" title="所以工作目录的问题其实很重要。"></a>所以工作目录的问题其实很重要。</h4>报错：<br>Command /usr/bin/codesign failed with exit code 1 <strong> ARCHIVE FAILED </strong></li>
+</ul>
+<p><img src="http://upload-images.jianshu.io/upload_images/308319-e595ae6f062ab8fa.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<ul>
+<li>2.xcrun: error: unable to find utility “PackageApplication”, not a developer tool or in PATH</li>
+</ul>
+<p><a href="http://blog.csdn.net/itiapp_home/article/details/70241011" target="_blank" rel="noopener">解决办法</a></p>
+<ul>
+<li>3.unknown error -1=ffffffffffffffff Command /bin/sh failed with exit code 1</li>
+</ul>
+<p>这个错的问题可能有很多种，这里有几种原因和处理方式：<br><a href="https://www.cnblogs.com/tufei7/p/6159811.html" target="_blank" rel="noopener">原因1</a><br><a href="https://www.jianshu.com/p/cda327047524" target="_blank" rel="noopener">原因2</a></p>
+<ul>
+<li>4.error: exportArchive: “AppName.app” requires a provisioning profile with the Push Notifications and App Groups features.<br>Error Domain=IDEProvisioningErrorDomain Code=9<br>“AppName.app” requires a provisioning profile with the Push Notifications and App Groups features.” UserInfo={NSLocalizedDescription=”AppName.app” requires a provisioning profile with the Push Notifications and App Groups features., NSLocalizedRecoverySuggestion=Add a profile to the “provisioningProfiles” dictionary in your Export Options property list.}<br>// 或<br>“Error Domain=IDEProvisioningErrorDomain Code=9 \”\”ios-simple-objc.app\” requires a provisioning profile.\”<br>UserInfo={NSLocalizedDescription=\”ios-simple-objc.app\” requires a provisioning profile., NSLocalizedRecoverySuggestion=Add a profile to the \”provisioningProfiles\” dictionary in your Export Options property list.}”<br><a href="http://blog.csdn.net/andanlan/article/details/78113330?locationNum=9&amp;fps=1" target="_blank" rel="noopener">解决方式</a></li>
+</ul>
+<p>不过笔者目前的Xcode9.2没有遇到这个提示，是之前Jenkins工作目录不对的时候调试出现过，用脚本添加ExportOptions.plist文件也不好使，如果有类似的问题大家还是百度并尝试吧。</p>
+<ul>
+<li><p>4.修改端口<br>如果要修改端口，比如7070，可在重启jenkins前执行以下命令修改端口参数:<br><code>sudo defaults write /Library/Preferences/org.jenkins-ci httpPort 7070</code><br>然后重启jenkins:<br><code>sudo launchctl unload -w /Library/LaunchDaemons/org.jenkins-ci.plist</code><br><code>sudo launchctl load -w /Library/LaunchDaemons/org.jenkins-ci.plist</code><br>到此，可以访问<code>http://localhost:7070</code>了。</p>
+</li>
+<li><p>5.Mac卸载Jenkins</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">//进入以下目录，双击运行</span><br><span class="line">/Library/Application Support/Jenkins/Uninstall.command</span><br><span class="line">//也可以这样运行</span><br><span class="line">sh &quot;/Library/Application Support/Jenkins/Uninstall.command&quot;</span><br><span class="line"></span><br><span class="line">//删除配置，这个可选</span><br><span class="line">sudo rm -rf /var/root/.jenkins ~/.jenkins</span><br><span class="line">sudo launchctl unload /Library/LaunchDaemons/org.jenkins-ci.plist</span><br><span class="line">sudo rm /Library/LaunchDaemons/org.jenkins-ci.plist</span><br><span class="line">sudo rm -rf /Applications/Jenkins &quot;/Library/Application Support/Jenkins&quot; /Library/Documentation/Jenkins</span><br><span class="line">sudo rm -rf /Users/Shared/Jenkins</span><br><span class="line">sudo dscl . -delete /Users/jenkins</span><br><span class="line">sudo dscl . -delete /Groups/jenkins</span><br><span class="line">sudo rm -f /etc/newsyslog.d/jenkins.conf</span><br><span class="line">pkgutil --pkgs | grep &apos;org\.jenkins-ci\.&apos; | xargs -n 1 sudo pkgutil --forget</span><br><span class="line"></span><br><span class="line">//如果使用brew安装的，可以执行以下命令</span><br><span class="line">brew uninstall jenkins</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><a href="https://www.cnblogs.com/EasonJim/p/6277708.html" target="_blank" rel="noopener">参见</a></p>
 
       
 
@@ -175,7 +279,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">报错</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">自动化打包</a>
         		</li>
       		
 		</ul>
@@ -185,7 +289,7 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2018/01/25/The-executable-was-signed-with-invalid-entitlements-的解决/">展开全文 >></a>
+          <a class="article-more-a" href="/2018/01/09/iOS开发-自动化打包Jenkins集成/">展开全文 >></a>
         </p>
       
 
@@ -753,6 +857,84 @@
 
 
   
+    <article id="post-The-executable-was-signed-with-invalid-entitlements-的解决" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/04/14/The-executable-was-signed-with-invalid-entitlements-的解决/">The executable was signed with invalid entitlements.的解决</a>
+    </h1>
+  
+
+        
+        <a href="/2017/04/14/The-executable-was-signed-with-invalid-entitlements-的解决/" class="archive-article-date">
+  	<time datetime="2017-04-14T02:21:12.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-04-14</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>有时运行下载的工程会有The executable was signed with invalid entitlements.提示</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/308319-9c914ad0734f5135.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="提示图.png"></p>
+<p>一般的解决方案是到Xcode工程中TARGET -&gt; Build Settings -&gt; Code Signing Entitlements删除内容<br><img src="http://upload-images.jianshu.io/upload_images/308319-79dfd5309a4c04cc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="截图.png"></p>
+<p>或者再在工程目录中找到后缀.entitlements的文件，删除所有字段值<br><img src="http://upload-images.jianshu.io/upload_images/308319-93fdeda2394eb501.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="截图.png"></p>
+<p>一般来说这样能解决大部分问题，然而笔者遇到的问题就不一样了，最近开发需要集成深信服的VPN，并且需要用L3VPN模式，而他们是用应用程序扩展实现的SDK，所以需要两个证书，扩展部分的签名证书ID是主程序证书ID的字段扩展（比如主程序的证书ID是com.jianshu.ios；那么扩展程序的证书则必须是com.jianshu.ios.xxxx），而启用VPN功能的扩展证书申请时需要勾选Network Extension功能，当时没看到说明，结果就一直报上边的权限提示。后来勾上后重新生成证书就解决了。 关于应用程序扩展请参阅App Extension编程指南（iOS8/OS X v10.10）：创建应用扩展(<a href="http://www.cocoachina.com/ios/20140812/9366.html" target="_blank" rel="noopener">中文</a>,<a href="https://developer.apple.com/library/content/documentation/General/Conceptual/ExtensibilityPG/ExtensionCreation.html#//apple_ref/doc/uid/TP40014214-CH5-SW1" target="_blank" rel="noopener">英文</a>)</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">报错</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/04/14/The-executable-was-signed-with-invalid-entitlements-的解决/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-分页控制器半自动滑动（仿36氪）" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1019,110 +1201,6 @@
 
 
   
-    <article id="post-iOS开发-关于苹果健康数据的获取" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/06/25/iOS开发-关于苹果健康数据的获取/">iOS开发-关于苹果健康数据的获取</a>
-    </h1>
-  
-
-        
-        <a href="/2016/06/25/iOS开发-关于苹果健康数据的获取/" class="archive-article-date">
-  	<time datetime="2016-06-25T02:20:49.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-06-25</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <ul>
-<li>关于iOS10的报错<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Terminating app due to uncaught exception &apos;NSInvalidArgumentException&apos;,</span><br><span class="line">reason: &apos;NSHealthUpdateUsageDescription must be set in the app&apos;s Info.plist</span><br><span class="line">in order to request write authorization.&apos;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>处理方法：在Info.plist文件中添加关键字<code>NSHealthShareUsageDescription</code>和<code>NSHealthUpdateUsageDescription</code>，写入和读取都需要。iOS10对于涉及用户隐私的很多数据获取都添加了类似的设置，可根据提示在plist文件中添加相应的权限字段。</p>
-<p>在苹果的 iOS8 系统中自带了健康应用，可以记录我们在一天当中的运动数据，比如走了多少步，一天走了或跑了多少公里等。还可以接入硬件设备以写入运动数据，HealthKit框架为苹果为采集各种健康数据源提供的接口，可以用来采集和整合各种健康数据的来源，如运动手环，AppleWatch，以及iPhone设备提供的健康数据。这里简单介绍下如何获取苹果健康的数据。<br>实现流程：</p>
-<h3 id="一、在工程中添加HealthKit库。"><a href="#一、在工程中添加HealthKit库。" class="headerlink" title="一、在工程中添加HealthKit库。"></a>一、在工程中添加HealthKit库。</h3><h3 id="二、创建模型（或在其他模型中添加-import），添加HKHealthStore属性，HKHealthStore是使用HealthKit中关键的一个类。"><a href="#二、创建模型（或在其他模型中添加-import），添加HKHealthStore属性，HKHealthStore是使用HealthKit中关键的一个类。" class="headerlink" title="二、创建模型（或在其他模型中添加#import），添加HKHealthStore属性，HKHealthStore是使用HealthKit中关键的一个类。"></a>二、创建模型（或在其他模型中添加#import），添加HKHealthStore属性，HKHealthStore是使用HealthKit中关键的一个类。</h3><h3 id="三、创建调用方法，在方法实现中主要要做的有3步"><a href="#三、创建调用方法，在方法实现中主要要做的有3步" class="headerlink" title="三、创建调用方法，在方法实现中主要要做的有3步:"></a>三、创建调用方法，在方法实现中主要要做的有3步:</h3><ul>
-<li><p>1、判断设备是否支持HealthKit框架</p>
-</li>
-<li><p>2、请求苹果健康的认证</p>
-</li>
-<li><p>3、获取苹果健康的数据</p>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line">// 方法代码</span><br><span class="line">- (void)getIphoneHealthData&#123;</span><br><span class="line"></span><br><span class="line">self.healthSteps = [NSMutableArray array];</span><br><span class="line"></span><br><span class="line">self.healthDistances = [NSMutableArray array];</span><br><span class="line"></span><br><span class="line">self.healthCalories = [NSMutableArray array];</span><br><span class="line"></span><br><span class="line">NSSet *getData;</span><br><span class="line"></span><br><span class="line">// 1.判断设备是否支持HealthKit框架</span><br><span class="line"></span><br><span class="line">if ([HKHealthStore isHealthDataAvailable]) &#123;</span><br><span class="line"></span><br><span class="line">getData = [self getData];</span><br><span class="line"></span><br><span class="line">&#125; else &#123;</span><br><span class="line"></span><br><span class="line">NSLog(@&quot;---------不支持 HealthKit 框架&quot;);</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">store = [[HKHealthStore alloc] init];</span><br><span class="line"></span><br><span class="line">// 2.请求苹果健康的认证</span><br><span class="line"></span><br><span class="line">[store requestAuthorizationToShareTypes:nil readTypes:getData completion:^(BOOL success, NSError * _Nullable error) &#123;</span><br><span class="line"></span><br><span class="line">if (!success) &#123;</span><br><span class="line"></span><br><span class="line">NSLog(@&quot;--------请求苹果健康认证失败&quot;);</span><br><span class="line"></span><br><span class="line">return ;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">dispatch_async(dispatch_get_main_queue(), ^&#123;</span><br><span class="line"></span><br><span class="line">// 3.获取苹果健康数据</span><br><span class="line"></span><br><span class="line">[self getHealthStepData];</span><br><span class="line"></span><br><span class="line">[self getHealthDistanceData];</span><br><span class="line"></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">&#125;];</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>在第一步判断设备支持HealthKit框架后，设置好要获取的数据类型，笔者此处获取的是步数，距离数据。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">// getData方法</span><br><span class="line">- (NSSet *)getData&#123;</span><br><span class="line"></span><br><span class="line">HKQuantityType  *step = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierStepCount];</span><br><span class="line"></span><br><span class="line">HKQuantityType *distance = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierDistanceWalkingRunning];</span><br><span class="line"></span><br><span class="line">return [NSSet setWithObjects:step,distance, nil];</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>第二步请求苹果健康的认证，此处用到HKHealthStore属性，实例化属性后调用认证方法，注意方法中的参数ShareTypes 和 readTypes，一个是认证写入类型，一个是认证读取类型，认证成功后开始最重要的第三步，获取数据，此处为异步执行。</p>
-<p>在获取数据的方法中时间的设置是比较麻烦的，不过都是一样的；HKQuantityType实例对象用于设置要获取的数据类型，NSPredicate实例对象用于设置获取数据的时间段，HKStatisticsCollectionQuery实例对象用于获取数据，在获取的数据结果中需要把每一条数据遍历出来，可以做一些需要的格式的处理。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br></pre></td><td class="code"><pre><span class="line">- (void)getHealthStepData&#123;</span><br><span class="line"></span><br><span class="line">HKHealthStore *healthStore = [[HKHealthStore alloc]init];</span><br><span class="line"></span><br><span class="line">NSCalendar *calendar = [NSCalendar currentCalendar];</span><br><span class="line"></span><br><span class="line">// 设置时间支持单位</span><br><span class="line"></span><br><span class="line">NSDateComponents *anchorComponents =</span><br><span class="line"></span><br><span class="line">[calendar components:NSCalendarUnitDay | NSCalendarUnitMonth |</span><br><span class="line"></span><br><span class="line">NSCalendarUnitYear | NSCalendarUnitWeekday fromDate:[NSDate date]];</span><br><span class="line"></span><br><span class="line">NSDate *anchorDate = [calendar dateFromComponents:anchorComponents];</span><br><span class="line"></span><br><span class="line">// 获取数据的截止时间 今天</span><br><span class="line"></span><br><span class="line">NSDate *endDate = [NSDate date];</span><br><span class="line"></span><br><span class="line">// 获取数据的起始时间 此处取从今日往前推100天的数据</span><br><span class="line"></span><br><span class="line">NSDate *startDate = [NSDate dateWithTimeIntervalSinceNow:-100*24*60*60];</span><br><span class="line"></span><br><span class="line">// 数据类型</span><br><span class="line"></span><br><span class="line">HKQuantityType *type = [HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierStepCount];</span><br><span class="line"></span><br><span class="line">// Your interval: sum by hour</span><br><span class="line"></span><br><span class="line">NSDateComponents *intervalComponents = [[NSDateComponents alloc] init];</span><br><span class="line"></span><br><span class="line">intervalComponents.day = 1;</span><br><span class="line"></span><br><span class="line">// Example predicate 用于获取设置时间段内的数据</span><br><span class="line"></span><br><span class="line">NSPredicate *predicate = [HKQuery predicateForSamplesWithStartDate:startDate endDate:endDate options:HKQueryOptionStrictStartDate];</span><br><span class="line"></span><br><span class="line">HKStatisticsCollectionQuery *query = [[HKStatisticsCollectionQuery alloc] initWithQuantityType:type quantitySamplePredicate:predicate options:HKStatisticsOptionCumulativeSum anchorDate:anchorDate intervalComponents:intervalComponents];</span><br><span class="line"></span><br><span class="line">query.initialResultsHandler = ^(HKStatisticsCollectionQuery *query, HKStatisticsCollection *result, NSError *error) &#123;</span><br><span class="line"></span><br><span class="line">for (HKStatistics *sample in [result statistics]) &#123;</span><br><span class="line"></span><br><span class="line">//            NSLog(@&quot;--------------%@ 至 %@ : %@&quot;, sample.startDate, sample.endDate, sample.sumQuantity);</span><br><span class="line"></span><br><span class="line">NSDate *date = sample.endDate;</span><br><span class="line"></span><br><span class="line">NSDateFormatter *formatter = [[NSDateFormatter alloc] init];</span><br><span class="line"></span><br><span class="line">[formatter setDateFormat:@&quot;yyyy-MM-dd&quot;];</span><br><span class="line"></span><br><span class="line">NSString *dateTime = [formatter stringFromDate:date];</span><br><span class="line"></span><br><span class="line">double totalStep = [sample.sumQuantity doubleValueForUnit:[HKUnit countUnit]];</span><br><span class="line"></span><br><span class="line">NSString *value = [NSString stringWithFormat:@&quot;%f&quot;,totalStep];</span><br><span class="line"></span><br><span class="line">NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:</span><br><span class="line"></span><br><span class="line">dateTime,@&quot;dateTime&quot;,</span><br><span class="line"></span><br><span class="line">value,@&quot;value&quot;,nil];</span><br><span class="line"></span><br><span class="line">[self.healthSteps addObject:dic];</span><br><span class="line"></span><br><span class="line">//            NSLog(@&quot;gaizaoDateStyle:%@  Dic = %@&quot;,self.healthSteps,dic);</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">self.healthCalories = self.healthSteps;</span><br><span class="line"></span><br><span class="line">NSDictionary *healthSteps = [NSDictionary dictionaryWithObjectsAndKeys:</span><br><span class="line"></span><br><span class="line">self.healthSteps,@&quot;healthSteps&quot;,</span><br><span class="line"></span><br><span class="line">self.healthCalories,@&quot;healthCalories&quot;,nil];</span><br><span class="line"></span><br><span class="line">NSLog(@&quot;改造数据格式：%@&quot;,healthSteps);</span><br><span class="line"></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">[healthStore executeQuery:query];</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>由于苹果健康应用中，用户可以自己手动添加数据，所以为了获取数据的准确性，像微信运动会把这些数据过滤掉，那么如何过滤呢？</p>
-<p>在获取的数据结果中，每一条结果都有数据来源属性，打印HKStatistics实例对象的sources属性就可以看到数据的所有来源（因为此处获取的是一天的数据，一天内的数据来源都会被打印出来），如果有收到添加的数据，可以在打印结果中看到com.apple.Health数据源，我们要过滤的就是它。</p>
-<p>接下来就是用获取的数据总数把手动添加的数据减掉，结果就是我们想要获取的准确的数据。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">double totalStep = [sample.sumQuantity doubleValueForUnit:[HKUnit countUnit]];</span><br><span class="line"></span><br><span class="line">NSString *appleHealth = @&quot;com.apple.Health&quot;;</span><br><span class="line"></span><br><span class="line">double editStep  = 0.0;</span><br><span class="line"></span><br><span class="line">for (HKSource *source in sample.sources) &#123;</span><br><span class="line"></span><br><span class="line">if ([source.bundleIdentifier isEqualToString:appleHealth]) &#123;</span><br><span class="line"></span><br><span class="line">// 获取用户自己添加的数据 并减去，防止用户手动刷数据</span><br><span class="line"></span><br><span class="line">HKSource *healthSource = source;</span><br><span class="line"></span><br><span class="line">editStep  = [[sample sumQuantityForSource:healthSource] doubleValueForUnit:[HKUnit countUnit]];</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">NSInteger step = (NSInteger)totalStep - (NSInteger)editStep;</span><br><span class="line"></span><br><span class="line">NSString *value = [NSString stringWithFormat:@&quot;%ld&quot;,step];</span><br></pre></td></tr></table></figure>
-<p>最后是获取距离的方法，和前边类似。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">- (void)getHealthDistanceData&#123;</span><br><span class="line"></span><br><span class="line">HKHealthStore *healthStore = [[HKHealthStore alloc]init];</span><br><span class="line"></span><br><span class="line">NSCalendar *calendar = [NSCalendar currentCalendar];</span><br><span class="line"></span><br><span class="line">NSDateComponents *anchorComponents =</span><br><span class="line"></span><br><span class="line">[calendar components:NSCalendarUnitDay | NSCalendarUnitMonth |</span><br><span class="line"></span><br><span class="line">NSCalendarUnitYear | NSCalendarUnitWeekday fromDate:[NSDate date]];</span><br><span class="line"></span><br><span class="line">NSDate *anchorDate = [calendar dateFromComponents:anchorComponents];</span><br><span class="line"></span><br><span class="line">NSDate *endDate = [NSDate date];</span><br><span class="line"></span><br><span class="line">NSDate *startDate = [NSDate dateWithTimeIntervalSinceNow:-100*24*60*60];</span><br><span class="line"></span><br><span class="line">HKQuantityType *type = [HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierDistanceWalkingRunning];</span><br><span class="line"></span><br><span class="line">// Your interval: sum by hour</span><br><span class="line"></span><br><span class="line">NSDateComponents *intervalComponents = [[NSDateComponents alloc] init];</span><br><span class="line"></span><br><span class="line">intervalComponents.day = 1;</span><br><span class="line"></span><br><span class="line">// Example predicate</span><br><span class="line"></span><br><span class="line">NSPredicate *predicate = [HKQuery predicateForSamplesWithStartDate:startDate endDate:endDate options:HKQueryOptionStrictStartDate];</span><br><span class="line"></span><br><span class="line">HKStatisticsCollectionQuery *query = [[HKStatisticsCollectionQuery alloc] initWithQuantityType:type quantitySamplePredicate:predicate options:HKStatisticsOptionCumulativeSum anchorDate:anchorDate intervalComponents:intervalComponents];</span><br><span class="line"></span><br><span class="line">query.initialResultsHandler = ^(HKStatisticsCollectionQuery *query, HKStatisticsCollection *result, NSError *error) &#123;</span><br><span class="line"></span><br><span class="line">for (HKStatistics *sample in [result statistics]) &#123;</span><br><span class="line"></span><br><span class="line">//            NSLog(@&quot;+++++++++++++++%@ 至 %@ : %@&quot;, sample.startDate, sample.endDate, sample.sumQuantity);</span><br><span class="line"></span><br><span class="line">NSDate *date = sample.endDate;</span><br><span class="line"></span><br><span class="line">NSDateFormatter *formatter = [[NSDateFormatter alloc] init];</span><br><span class="line"></span><br><span class="line">[formatter setDateFormat:@&quot;yyyy-MM-dd&quot;];</span><br><span class="line"></span><br><span class="line">NSString *dateTime = [formatter stringFromDate:date];</span><br><span class="line"></span><br><span class="line">double totalDistance = [sample.sumQuantity doubleValueForUnit:[HKUnit meterUnit]];</span><br><span class="line"></span><br><span class="line">NSString *appleHealth = @&quot;com.apple.Health&quot;;</span><br><span class="line"></span><br><span class="line">//            double floor = [sample.sumQuantity doubleValueForUnit:[HKUnit yardUnit]];</span><br><span class="line"></span><br><span class="line">double editDistance  = 0.0;</span><br><span class="line"></span><br><span class="line">for (HKSource *source in sample.sources) &#123;</span><br><span class="line"></span><br><span class="line">if ([source.bundleIdentifier isEqualToString:appleHealth]) &#123;</span><br><span class="line"></span><br><span class="line">// 获取用户自己添加的数据 并减去，防止用户手动刷数据</span><br><span class="line"></span><br><span class="line">HKSource *healthSource = source;</span><br><span class="line"></span><br><span class="line">editDistance = [[sample sumQuantityForSource:healthSource] doubleValueForUnit:[HKUnit meterUnit]];</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">double distance = totalDistance/1000 - editDistance/1000;</span><br><span class="line"></span><br><span class="line">NSString *value = [NSString stringWithFormat:@&quot;%f&quot;,distance];</span><br><span class="line"></span><br><span class="line">NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:</span><br><span class="line"></span><br><span class="line">dateTime,@&quot;dateTime&quot;,</span><br><span class="line"></span><br><span class="line">value,@&quot;value&quot;,nil];</span><br><span class="line"></span><br><span class="line">[self.healthDistances addObject:dic];</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">NSLog(@&quot;改造距离格式：%@&quot;,self.healthDistances);</span><br><span class="line"></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">[healthStore executeQuery:query];</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>在打包时候需要打开HealthKit使用的开关，如图：</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/308319-240d724cdc91a4c7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="屏幕快照 2016-08-25 下午5.15.31.png"></p>
-<p>此外打包证书也需要勾选苹果健康选项，由于开发者账号划归别的部门负责了，所以没法截图了。。。</p>
-<p>#踩的坑<br>之前做了一个健康运动的APP，要把苹果健康的数据和fitbit手环的数据比较处理后做展示，结果发现请求fitbit的数据产生的起止时间段内如果有没数据的，比如步数，卡路里，等，会都返回0，还比较人性化。但是苹果健康就没这么友好了，如果没有数据那就是没有，根本不会给你0，比如2015年1月1号到2015年1月20号的数据中1月10号这天的数据被删了，那返回的数据就只有19条，10号这天的不会返回0，直接就没有这条数据。再或者本身开始使用苹果健康记录数据的时间就是从2015年1月10号开始的，那1月10号之前的数据就都没有，不会返回0给你。</p>
-<p><a href="https://github.com/MisterZhiWei/iPhoneHealth" target="_blank" rel="noopener">demo地址</a></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">iOS开发 苹果健康</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2016/06/25/iOS开发-关于苹果健康数据的获取/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -1232,15 +1310,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">iOS开发 苹果健康</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">相册编辑</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">折线图</a>
+                <a href="javascript:void(0)" class="js-tag color1">iOS开发 苹果健康</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">自动化打包</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1256,7 +1334,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">折线图</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">自定义按钮</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">录屏</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1269,10 +1355,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">调试</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">录屏</a>
               </li>
             
             <div class="clearfix"></div>
