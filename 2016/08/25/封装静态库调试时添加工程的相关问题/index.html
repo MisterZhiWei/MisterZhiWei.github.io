@@ -78,7 +78,7 @@
 <link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="iWatch开发," />
+  <meta name="keywords" content="静态库,调试," />
 
 
 
@@ -94,21 +94,29 @@
 
 
 
-<meta name="description" content="开发需要要把iWatch设备添加到开发证书里，但手表没法直接连接电脑在iTunes里像手机设备那样点击序列号查看。需要借助Xcode来查看，应该是Xcode7以上。  1. 将与手表配对的手机连接到电脑，并信任。">
-<meta name="keywords" content="iWatch开发">
+<meta name="description" content="在我们封装静态库时，首先会把需要封装成.a文件的部分抽离出来，放到另一个独立的工程中作为引用。而为了方便调试，我们又需要把这个封装的工程放到当前工程中进行代码调试。本文主要简述在一个工程中如何引入另外一个工程，以及添加时的问题如何处理。 添加步骤：一、先把需要封装成.a的工程文件，正常运行生成.a文件，拿到生成的文件添加到需要引入该文件的工程中。">
+<meta name="keywords" content="静态库,调试">
 <meta property="og:type" content="article">
-<meta property="og:title" content="获取iWatch的UDID">
-<meta property="og:url" content="http://yoursite.com/2017/12/21/获取iWatch的UDID/index.html">
+<meta property="og:title" content="封装静态库调试时添加工程的相关问题">
+<meta property="og:url" content="http://yoursite.com/2016/08/25/封装静态库调试时添加工程的相关问题/index.html">
 <meta property="og:site_name" content="zwBlog">
-<meta property="og:description" content="开发需要要把iWatch设备添加到开发证书里，但手表没法直接连接电脑在iTunes里像手机设备那样点击序列号查看。需要借助Xcode来查看，应该是Xcode7以上。  1. 将与手表配对的手机连接到电脑，并信任。">
+<meta property="og:description" content="在我们封装静态库时，首先会把需要封装成.a文件的部分抽离出来，放到另一个独立的工程中作为引用。而为了方便调试，我们又需要把这个封装的工程放到当前工程中进行代码调试。本文主要简述在一个工程中如何引入另外一个工程，以及添加时的问题如何处理。 添加步骤：一、先把需要封装成.a的工程文件，正常运行生成.a文件，拿到生成的文件添加到需要引入该文件的工程中。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/308319-1c0c718a8f997ffe.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/308319-55fdc5697d9618b5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2018-01-26T03:09:17.000Z">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/308319-d87a48134f5cd789.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/308319-3cbd92ad1b506b30.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/308319-7de9686764156ad7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/308319-7e619f4dc8181258.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/308319-9cdf3c0c1af687c8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/308319-9ea64bcabd513ac2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/308319-f30f0112724c1d55.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/308319-60f80c481cf61187.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/308319-83fe0db2e563cc44.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/308319-8d4e0d3ee1fafc53.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2018-02-05T01:18:15.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="获取iWatch的UDID">
-<meta name="twitter:description" content="开发需要要把iWatch设备添加到开发证书里，但手表没法直接连接电脑在iTunes里像手机设备那样点击序列号查看。需要借助Xcode来查看，应该是Xcode7以上。  1. 将与手表配对的手机连接到电脑，并信任。">
-<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/308319-1c0c718a8f997ffe.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta name="twitter:title" content="封装静态库调试时添加工程的相关问题">
+<meta name="twitter:description" content="在我们封装静态库时，首先会把需要封装成.a文件的部分抽离出来，放到另一个独立的工程中作为引用。而为了方便调试，我们又需要把这个封装的工程放到当前工程中进行代码调试。本文主要简述在一个工程中如何引入另外一个工程，以及添加时的问题如何处理。 添加步骤：一、先把需要封装成.a的工程文件，正常运行生成.a文件，拿到生成的文件添加到需要引入该文件的工程中。">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/308319-d87a48134f5cd789.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 
 
 
@@ -137,13 +145,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/12/21/获取iWatch的UDID/"/>
+  <link rel="canonical" href="http://yoursite.com/2016/08/25/封装静态库调试时添加工程的相关问题/"/>
 
 
 
 
 
-  <title>获取iWatch的UDID | zwBlog</title>
+  <title>封装静态库调试时添加工程的相关问题 | zwBlog</title>
   
 
 
@@ -276,7 +284,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/21/获取iWatch的UDID/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/08/25/封装静态库调试时添加工程的相关问题/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="ZhiWei">
@@ -293,7 +301,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">获取iWatch的UDID</h1>
+          <h1 class="post-title" itemprop="name headline">封装静态库调试时添加工程的相关问题</h1>
         
 
         <div class="post-meta">
@@ -305,8 +313,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-21T10:43:13+08:00">
-                2017-12-21
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-08-25T10:04:40+08:00">
+                2016-08-25
               </time>
             
 
@@ -365,14 +373,24 @@
       
 
       
-        <p>开发需要要把iWatch设备添加到开发证书里，但手表没法直接连接电脑在iTunes里像手机设备那样点击序列号查看。需要借助Xcode来查看，应该是Xcode7以上。</p>
-<ul>
-<li><h3 id="1-将与手表配对的手机连接到电脑，并信任。"><a href="#1-将与手表配对的手机连接到电脑，并信任。" class="headerlink" title="1. 将与手表配对的手机连接到电脑，并信任。"></a>1. 将与手表配对的手机连接到电脑，并信任。</h3><a id="more"></a></li>
-<li><h3 id="2-打开Xcode并按下图点击菜单"><a href="#2-打开Xcode并按下图点击菜单" class="headerlink" title="2. 打开Xcode并按下图点击菜单"></a>2. 打开Xcode并按下图点击菜单</h3><p><img src="http://upload-images.jianshu.io/upload_images/308319-1c0c718a8f997ffe.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="状态栏点击查看.png"></p>
-</li>
-<li><h3 id="3-设备正常连接后，并且手表和手机正常连接，此时即可查看到iWatch的UDID，可点击复制了，手机的UDID也可以以这种方式copy。"><a href="#3-设备正常连接后，并且手表和手机正常连接，此时即可查看到iWatch的UDID，可点击复制了，手机的UDID也可以以这种方式copy。" class="headerlink" title="3. 设备正常连接后，并且手表和手机正常连接，此时即可查看到iWatch的UDID，可点击复制了，手机的UDID也可以以这种方式copy。"></a>3. 设备正常连接后，并且手表和手机正常连接，此时即可查看到iWatch的UDID，可点击复制了，手机的UDID也可以以这种方式copy。</h3></li>
-</ul>
-<p><img src="http://upload-images.jianshu.io/upload_images/308319-55fdc5697d9618b5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="UDID查看.png"></p>
+        <p>在我们封装静态库时，首先会把需要封装成.a文件的部分抽离出来，放到另一个独立的工程中作为引用。而为了方便调试，我们又需要把这个封装的工程放到当前工程中进行代码调试。本文主要简述在一个工程中如何引入另外一个工程，以及添加时的问题如何处理。</p>
+<p>添加步骤：<br>一、先把需要封装成.a的工程文件，正常运行生成.a文件，拿到生成的文件添加到需要引入该文件的工程中。<br><a id="more"></a><br>二、将添加的文件中的.a文件删除掉，然后将封装.a的工程拖到此处。<br>如图：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/308319-d87a48134f5cd789.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="封装的SDK文件.png"></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/308319-3cbd92ad1b506b30.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="替换添加工程.png"></p>
+<p>三、如图做如下操作<br>1.添加lib文件</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/308319-7de9686764156ad7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="屏幕快照 2016-08-31 下午5.14.32.png"></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/308319-7e619f4dc8181258.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="屏幕快照 2016-08-31 下午5.14.57.png"></p>
+<p>2.添加设置，在target-&gt;build Setting 中搜索 Header Search Paths,并按图中添加两项内容<br><img src="http://upload-images.jianshu.io/upload_images/308319-9cdf3c0c1af687c8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="屏幕快照 2016-08-31 下午5.15.22.png"></p>
+<hr>
+<p>此时build ,不出所料还是报错了，那么原因是什么呢？如图打开工程的products文件夹,此处为红色也就是我们还没有build好这个工程。<br><img src="http://upload-images.jianshu.io/upload_images/308319-9ea64bcabd513ac2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="屏幕快照 2016-08-31 下午5.40.55.png"></p>
+<p>解决方法如下：<br>在Xcode Toolbar中选中当前需要build的工程<br><img src="http://upload-images.jianshu.io/upload_images/308319-f30f0112724c1d55.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="屏幕快照 2016-08-31 下午5.43.33.png"></p>
+<p>因为是调试环境，所以需要将工程的build configuration选为Debug模式</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/308319-60f80c481cf61187.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="屏幕快照 2016-08-31 下午5.44.03.png"></p>
+<p>此时分别选则模拟器和真机环境build，然后再看products路径下的.a文件颜色已经变过来了。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/308319-83fe0db2e563cc44.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="屏幕快照 2016-08-31 下午5.40.29.png"></p>
+<p>这时就没问题了，如果还有问题的话，那就要检查封装SDK需要添加的系统库和第三方库是否添加完全了。</p>
+<p>提示：<br>在生成静态库时要在正式的环境中，所以需要选中Release模式，分别选择模拟器和真机环境build，并且生成SDK文件后，如果有universal文件夹，即真机和模拟器通用文件，要用这个文件，如果没有就用真机文件，universal是真机和模拟器合成文件，合成的方式可以在Xcode中添加脚本自动合成，也可以在在终端用命令行手动合成。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/308319-8d4e0d3ee1fafc53.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="封装的SDK文件.png"></p>
 
       
     </div>
@@ -390,7 +408,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/iWatch开发/" rel="tag"># iWatch开发</a>
+            <a href="/tags/静态库/" rel="tag"># 静态库</a>
+          
+            <a href="/tags/调试/" rel="tag"># 调试</a>
           
         </div>
       
@@ -403,8 +423,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/12/02/Runtime运行时机制/" rel="next" title="Runtime运行时机制">
-                <i class="fa fa-chevron-left"></i> Runtime运行时机制
+              <a href="/2016/06/25/iOS自定义按钮button详解封装说明/" rel="next" title="iOS自定义按钮button详解封装说明">
+                <i class="fa fa-chevron-left"></i> iOS自定义按钮button详解封装说明
               </a>
             
           </div>
@@ -413,8 +433,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/12/21/iOS开发-iWatch通知中心快捷回复实现/" rel="prev" title="iOS开发-iWatch通知中心快捷回复实现">
-                iOS开发-iWatch通知中心快捷回复实现 <i class="fa fa-chevron-right"></i>
+              <a href="/2016/08/31/iOS开发折线图-支持视图点击查看值/" rel="prev" title="iOS开发折线图-支持视图点击查看值">
+                iOS开发折线图-支持视图点击查看值 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -467,17 +487,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview sidebar-panel">
+      <section class="site-overview sidebar-panel sidebar-panel-active">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/assets/img/icon.png"
@@ -539,22 +550,6 @@
 
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-将与手表配对的手机连接到电脑，并信任。"><span class="nav-number">1.</span> <span class="nav-text">1. 将与手表配对的手机连接到电脑，并信任。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-打开Xcode并按下图点击菜单"><span class="nav-number">2.</span> <span class="nav-text">2. 打开Xcode并按下图点击菜单</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-设备正常连接后，并且手表和手机正常连接，此时即可查看到iWatch的UDID，可点击复制了，手机的UDID也可以以这种方式copy。"><span class="nav-number">3.</span> <span class="nav-text">3. 设备正常连接后，并且手表和手机正常连接，此时即可查看到iWatch的UDID，可点击复制了，手机的UDID也可以以这种方式copy。</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       
