@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="算法," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="快速排序由C. A. R. Hoare在1962年提出。它的基本思想是：通过一趟排序将要排序的数据分割成独立的两部分，其中一部分的所有数据都比另外一部分的所有数据都要小，然后再按此方法对这两部分数据分别进行快速排序，整个排序过程可以递归进行，以此达到整个数据变成有序序列。  快速排序是对冒泡排序的优化，要比冒泡排序的效率高出几个数量级。   之所以没打印10万级的排序对比是因为冒泡排序时间太久了">
+<meta name="keywords" content="算法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="快速排序算法_Objective-C">
+<meta property="og:url" content="http://yoursite.com/2018/02/28/快速排序算法-Objective-C/index.html">
+<meta property="og:site_name" content="zwBlog">
+<meta property="og:description" content="快速排序由C. A. R. Hoare在1962年提出。它的基本思想是：通过一趟排序将要排序的数据分割成独立的两部分，其中一部分的所有数据都比另外一部分的所有数据都要小，然后再按此方法对这两部分数据分别进行快速排序，整个排序过程可以递归进行，以此达到整个数据变成有序序列。  快速排序是对冒泡排序的优化，要比冒泡排序的效率高出几个数量级。   之所以没打印10万级的排序对比是因为冒泡排序时间太久了">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/308319-3aacd90407a6b8e5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/308319-6bbed9e3d1d70abb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/308319-c8d70d3ee76e99ca.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2018-02-28T12:42:21.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="快速排序算法_Objective-C">
+<meta name="twitter:description" content="快速排序由C. A. R. Hoare在1962年提出。它的基本思想是：通过一趟排序将要排序的数据分割成独立的两部分，其中一部分的所有数据都比另外一部分的所有数据都要小，然后再按此方法对这两部分数据分别进行快速排序，整个排序过程可以递归进行，以此达到整个数据变成有序序列。  快速排序是对冒泡排序的优化，要比冒泡排序的效率高出几个数量级。   之所以没打印10万级的排序对比是因为冒泡排序时间太久了">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/308319-3aacd90407a6b8e5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/02/28/快速排序算法-Objective-C/"/>
+
+
+
+
+
+  <title>快速排序算法_Objective-C | zwBlog</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?926d5bc189fa5fc245e426f70c23b8fd";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">zwBlog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">我的心愿是...世界和平</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/28/快速排序算法-Objective-C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ZhiWei">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/assets/img/icon.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="zwBlog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">快速排序算法_Objective-C</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-28T20:40:28+08:00">
+                2018-02-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/iOS开发/" itemprop="url" rel="index">
+                    <span itemprop="name">iOS开发</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>快速排序由C. A. R. Hoare在1962年提出。它的基本思想是：通过一趟排序将要排序的数据分割成独立的两部分，其中一部分的所有数据都比另外一部分的所有数据都要小，然后再按此方法对这两部分数据分别进行快速排序，整个排序过程可以递归进行，以此达到整个数据变成有序序列。</p>
+</blockquote>
+<p>快速排序是对冒泡排序的优化，要比冒泡排序的效率高出几个数量级。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/308319-3aacd90407a6b8e5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="10000个随机数的排序.png"></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/308319-6bbed9e3d1d70abb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="20000个随机数的排序.png"></p>
+<p>之所以没打印10万级的排序对比是因为冒泡排序时间太久了，但是可以看一下快速排序的计算时间。<br><code>100000个随机数的计算时间是 \ 0.129158秒</code><br><code>1000000个随机数的计算时间是 \ 1.429434秒</code><br><a id="more"></a><br>差距大的原因很明显，冒泡排序做了很多无用功的数值比较，打印出来看一下就知道了。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/308319-c8d70d3ee76e99ca.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="10000个随机数的计算比较次数.png"></p>
+<p>可以看到10000个随机数的比较冒泡排序比快速排序多了<code>49873225</code>次的无用比较，差距太悬殊了。</p>
+<p>冒泡排序大家都很熟了<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">NSMutableArray *snums = [NSMutableArray array];</span><br><span class="line">for (int i = 0; i&lt; 10000; i++) &#123;</span><br><span class="line">NSInteger num = arc4random()%10000000;</span><br><span class="line">[snums addObject:@(num)];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 冒泡排序升序</span><br><span class="line">for (int i = 0; i &lt; snums.count -1; i++) &#123;</span><br><span class="line"></span><br><span class="line">for (int j=i+1; j &lt; snums.count; j++) &#123;</span><br><span class="line">if ([snums[i] integerValue] &gt; [snums[j] integerValue]) &#123;</span><br><span class="line">[snums exchangeObjectAtIndex:i withObjectAtIndex:j];</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 冒泡排序降序</span><br><span class="line">for (int i = 0; i &lt; snums.count -1; i++) &#123;</span><br><span class="line"></span><br><span class="line">for (int j=i+1; j &lt; snums.count; j++) &#123;</span><br><span class="line">if ([snums[i] integerValue] &lt; [snums[j] integerValue]) &#123;</span><br><span class="line">[snums exchangeObjectAtIndex:i withObjectAtIndex:j];</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>快速排序的思路<br>1 . 设置两个变量<code>i</code>，<code>j</code>，排序开始时<code>i = 0</code>，<code>j = mutableArray.count - 1；</code><br>2 . 设置数组的第一个值为比较基准数<code>key</code>，<code>key = mutableArray.count[0]；</code><br>3 . 因为设置key为数组的第一个元素，所以先从数组最右边开始往前查找比key小的值。如果没有找到，执行<code>j--</code> 然后继续往前搜索；如果找到则将<code>mutableArray[j]</code>的值赋给<code>mutableArray[i]</code>，并且停止往前搜索，进入第4步；<br>4 . 从<code>i</code>位置开始往后搜索比<code>key</code>大的值，如果没有找到，执行<code>i++</code>继续往后搜索；如果找到则将<code>mutableArray[i]</code>的值赋给<code>mutableArray[j]</code>，并且停止往后搜索；<br>5 . 将<code>key</code>值赋给<code>mutableArray[i]</code>;<br>6 . 以<code>i</code>为分界线分别对两侧的数递归执行上述步骤，直到i == j（此时刚好执行完第三步或第四部），停止排序。</p>
+<h4 id="举例："><a href="#举例：" class="headerlink" title="举例："></a>举例：</h4><p>待排序数组是<code>[2,5,4,1,3]</code>;那么key=2，这个时候我们可以理解为数组的第一个位置腾出一个坑，成了<code>[(),5,4,1,3]</code>,而2由key先代为保管,<code>i=0</code>，<code>j=4</code>；</p>
+<p>这个时候我们进行上述步骤的第3步，key=2 依次比较后1&lt;2,所以1就填到了2的坑上成了<code>[1,5,4,(1),3]</code>，因为1赋值给了2那个位置，这时<code>j=3</code>，<code>i=0</code>；</p>
+<p>这个时候我们进行上述步骤的第4步，key=2 依次比较后 5&gt;2,所以5就填到了1最开始的位置，数组变成了<code>[1,(5),4,5,3]</code>,因为5赋值给了原来1的位置，这时<code>i=4</code>，<code>j=3</code>；</p>
+<p>那么接下来也就是第5步了，原来5的位置由我们拿出来的key=2 来填上，数组变成了<code>[1,2,4,5,3]</code>，然后把数组从i的位置分成两部分index范围[0,3],和[3,4]两部分，然后继续递归执行上述步骤。</p>
+<p>通过对数组不断的拆分比较最终完成排序。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><span class="line">- (void)quiklookAlgorithm&#123;</span><br><span class="line">NSMutableArray *mnums = [NSMutableArray array];</span><br><span class="line">for (int i = 0; i&lt; 10000; i++) &#123;</span><br><span class="line">NSInteger num = arc4random()%10000000;</span><br><span class="line">[mnums addObject:@(num)];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">NSDate *start = [NSDate date];</span><br><span class="line"></span><br><span class="line">[self quiklookSortWithArray:mnums withLeftIndex:0 withRightIndex:mnums.count-1];</span><br><span class="line"></span><br><span class="line">NSDate *end = [NSDate date];</span><br><span class="line">NSTimeInterval timeInterval = [end timeIntervalSinceDate:start];</span><br><span class="line"></span><br><span class="line">NSLog(@&quot;%ld个数的快速排序计算时间：%f秒    进行计算的比较次数%ld&quot;,mnums.count,timeInterval,_pNum);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)quiklookSortWithArray:(NSMutableArray *)mArray</span><br><span class="line">withLeftIndex:(NSInteger)leftIndex</span><br><span class="line">withRightIndex:(NSInteger)rightIndex&#123;</span><br><span class="line">if (leftIndex &gt;= rightIndex) &#123;</span><br><span class="line">return;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 基准数</span><br><span class="line">NSInteger i = leftIndex;</span><br><span class="line">NSInteger j = rightIndex;</span><br><span class="line">// 把key刨出来</span><br><span class="line">NSInteger key = [mArray[i] integerValue];</span><br><span class="line"></span><br><span class="line">//    // 降序排列</span><br><span class="line">//    while (i &lt; j) &#123;</span><br><span class="line">//        // 从右边j开始查找比基准数小的值</span><br><span class="line">//        while (i&lt;j &amp;&amp; [mArray[j] integerValue] &lt;= key) &#123;</span><br><span class="line">//            j--;</span><br><span class="line">//        &#125;</span><br><span class="line">//        // 如果比基准数小</span><br><span class="line">//        mArray[i] = mArray[j];</span><br><span class="line">//</span><br><span class="line">//        // 从左边i开始查找比基准数大的值</span><br><span class="line">//        while (i&lt;j &amp;&amp; [mArray[i] integerValue] &gt;= key) &#123;</span><br><span class="line">//            i++;</span><br><span class="line">//        &#125;</span><br><span class="line">//        // 如果比基准数大</span><br><span class="line">//        mArray[j] = mArray[i];</span><br><span class="line">//    &#125;</span><br><span class="line"></span><br><span class="line">// 升序排列</span><br><span class="line">while (i &lt; j) &#123;</span><br><span class="line">// 从右边j开始查找比基准数小的值</span><br><span class="line">while (i&lt;j &amp;&amp; [mArray[j] integerValue] &gt;= key) &#123;</span><br><span class="line">j--;</span><br><span class="line">_pNum += 1;</span><br><span class="line">&#125;</span><br><span class="line">// 如果比基准数小</span><br><span class="line">mArray[i] = mArray[j];</span><br><span class="line"></span><br><span class="line">// 从左边i开始查找比基准数大的值</span><br><span class="line">while (i&lt;j &amp;&amp; [mArray[i] integerValue] &lt;= key) &#123;</span><br><span class="line">i++;</span><br><span class="line">_pNum += 1;</span><br><span class="line">&#125;</span><br><span class="line">// 如果比基准数大</span><br><span class="line">mArray[j] = mArray[i];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 把key填回坑里</span><br><span class="line">mArray[i] = @(key);</span><br><span class="line"></span><br><span class="line">/** 递归排序 **/</span><br><span class="line"></span><br><span class="line">[self quiklookSortWithArray:mArray withLeftIndex:leftIndex withRightIndex:i-1];</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[self quiklookSortWithArray:mArray withLeftIndex:i+1 withRightIndex:rightIndex];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/算法/" rel="tag"># 算法</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/02/05/学习要像加勒比海盗/" rel="next" title="学习要像加勒比海盗">
+                <i class="fa fa-chevron-left"></i> 学习要像加勒比海盗
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/assets/img/icon.png"
+               alt="ZhiWei" />
+          <p class="site-author-name" itemprop="name">ZhiWei</p>
+           
+              <p class="site-description motion-element" itemprop="description">记录与分享</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#举例："><span class="nav-number">1.</span> <span class="nav-text">举例：</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear"> 2018</span>
+
+  <span class="author" itemprop="copyrightHolder">ZhiWei</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
