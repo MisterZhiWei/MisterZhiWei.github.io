@@ -105,7 +105,7 @@
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/308319-4ae3d78e6eab6892.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/308319-edc3a36a5087fb4e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/308319-b48a0a22d2f7000d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2018-04-03T07:59:54.000Z">
+<meta property="og:updated_time" content="2018-06-04T01:17:11.563Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS开发多线程-NSOperation  GCD详解">
 <meta name="twitter:description" content="iOS多线程开发必须知道的概念名词：1. 进程 进程（process）就是一个正在执行的程序的实例。也就是说我们的每一个APP程序在执行时实例都是一个进程，也可以说在APP执行时，它只拥有唯一的一个进程。 每一个进程都是独立的，每一个进程均在专属的内存空间内，iOS中每一个App（一个进程）都有自己独特的内存和磁盘空间，别的App（进程）是不允许访问的（越狱除外）。iOS开发中应用程序之间互相调用">
@@ -368,7 +368,7 @@
       
         <h5 id="iOS多线程开发必须知道的概念名词："><a href="#iOS多线程开发必须知道的概念名词：" class="headerlink" title="iOS多线程开发必须知道的概念名词："></a>iOS多线程开发必须知道的概念名词：</h5><h5 id="1-进程"><a href="#1-进程" class="headerlink" title="1. 进程"></a>1. 进程</h5><ul>
 <li>进程（process）就是一个正在执行的程序的实例。也就是说我们的每一个APP程序在执行时实例都是一个进程，也可以说在APP执行时，它只拥有唯一的一个进程。</li>
-<li>每一个进程都是独立的，每一个进程均在专属的内存空间内，iOS中每一个App（一个进程）都有自己独特的内存和磁盘空间，别的App（进程）是不允许访问的（越狱除外）。iOS开发中应用程序之间互相调用包括调用发短信、打电话等进程相关操作的API都被封装到<code>UIApplcation</code>这个类中了。</li>
+<li>每一个进程都是独立的，每一个进程均在专属的内存空间内，iOS中每一个App（一个进程）都有自己独特的内存和磁盘空间，别的App（进程）是不允许访问的（越狱除外）。iOS开发中应用程序之间互相调用包括调用发短信、打电话等进程相关操作的API都被封装到<code>UIApplication</code>这个类中了。</li>
 <li>每个进程至少拥有一个线程。</li>
 <li>在UNIX和Linux系统中是有进程层次结构的，当进程创建了另一个进程后，父进程和子进程就以某种方式继续保持联系。子进程自身可以创建更多的进程，组成一个进程的层次结构。（进程只有一个父进程但是可以有0个，1个或多个子进程。）而Windows中没有进程层次的概念，所有进程地位相同。唯一类似进程层次的地方是在创建进程的时候父进程得到一个特别的令牌（称为句柄），该令牌可以用来控制子进程。但是父进程可以把这个令牌传送给其他进程，这样就不存在进程层次了。</li>
 <li>进程有3种状态，分别是：<br>1）运行态（该时刻进程实际占用CPU）。<br>2）就绪态（可运行，但因为其他进程正在运行而暂时停止）。<br>3）阻塞态（除非某种外部事件发生，否则进程不能运行）。<a id="more"></a>
@@ -382,6 +382,9 @@
 <li>线程只是一个进程中的不同执行路径。线程有自己的堆栈和局部变量，但线程之间没有单独的地址空间，它们共享进程的地址空间。一个线程crash就等于整个进程crash。</li>
 <li>进程的创建和操作开销很大，某种意义上讲线程就相当于轻量级的进程。多线程使用的其中一个理由就是因为线程比进程更轻量级，线程比进程更容易（即更快）的创建和撤销。在许多系统中，创建一个线程比创建一个进程要快10~100倍。<br><img src="http://upload-images.jianshu.io/upload_images/308319-4ae3d78e6eab6892.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="进程线程关系示意图.jpeg"></li>
 </ul>
+<blockquote>
+<p>多线程（英语：multithreading），是指从软件或者硬件上实现多个线程并发执行的技术。</p>
+</blockquote>
 <p>多线程好处多的同时也易引发一些问题，“数据竞争”-多个线程操作同一资源时可能会导致数据的不一致；“死锁”-两个或两个以上的线程在执行过程中，因争夺资源而造成的一种互相等待的现象；使用太多的线程会消耗大量内存，因为每个线程都有自己的寄存器。进程太多的时候也有消耗太大的问题。</p>
 <h5 id="3-串行（serial）-amp-并发（concurrent）-amp-并行"><a href="#3-串行（serial）-amp-并发（concurrent）-amp-并行" class="headerlink" title="3.  串行（serial） &amp;  并发（concurrent）&amp; 并行"></a>3.  串行（serial） &amp;  并发（concurrent）&amp; 并行</h5><p><code>串行</code>是同步线程的实现方式，就是任务A执行结束才能开始执行B，单个线程只能执行一个任务。<br><code>并发</code>和<code>并行</code>其实是异步线程实现的两种形式。<code>并行</code>其实是真正的异步，多核CUP可以同时开启多条线程供多个任务同时执行,互不干扰。<code>并发</code>是伪异步，单个CUP一个时刻只能有一个线程执行，想执行多个任务就必须不断切换执行任务的线程。</p>
 <h5 id="4-同步-amp-异步"><a href="#4-同步-amp-异步" class="headerlink" title="4. 同步 &amp; 异步"></a>4. 同步 &amp; 异步</h5><p><code>同步</code>:多个任务情况下，一个任务A执行结束，才可以执行另一个任务B。只存在一个线程。<br><code>异步</code>:多个任务情况下，一个任务A正在执行，同时可以执行另一个任务B。任务B不用等待任务A结束才执行。存在多条线程。</p>
