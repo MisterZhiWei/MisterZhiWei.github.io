@@ -78,7 +78,7 @@
 <link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="折线图," />
+  <meta name="keywords" content="图层,动画," />
 
 
 
@@ -94,21 +94,22 @@
 
 
 
-<meta name="description" content="简述：折线图的使用场景主要集中在股票和与运动相关的APP界面中，运动类的如苹果健康，微信健康等。   其中运动类APP中一般支持查看天、月、年的数据图，由于界面宽度有限，当显示整月数据的时候，点与点之间的距离就会很近，用户也很难大概的估计点的数值，因此有的APP的折线图还支持点的点击查看数值功能，如微信运动的月数据（上图）,接下来就介绍一下如何绘制实现这样的界面和点击查看功能。">
-<meta name="keywords" content="折线图">
+<meta name="description" content="一般开发中常见的是UIView或者它的子类，CALayer似乎并太不常见，最多也就是在倒圆角或者加阴影或者边框的时候想起它来，但是当有一些复杂动画或者不寻常视图显示需求的时候，亦或是界面卡顿束手无策的时候，你会发现CALayer才是UIView背后视图显示处理的真正玩家。 iOS开发常用的视图控件都是UIView的子类，比如：UILabel -&amp;gt; UIViewUIImageView -&amp;gt">
+<meta name="keywords" content="图层,动画">
 <meta property="og:type" content="article">
-<meta property="og:title" content="iOS开发折线图-支持视图点击查看值">
-<meta property="og:url" content="http://yoursite.com/2016/08/31/iOS开发折线图-支持视图点击查看值/index.html">
+<meta property="og:title" content="Layer和Animation那些事（一）--关系篇">
+<meta property="og:url" content="http://yoursite.com/2018/07/06/Layer和Animation那些事（一）-关系篇/index.html">
 <meta property="og:site_name" content="zwBlog">
-<meta property="og:description" content="简述：折线图的使用场景主要集中在股票和与运动相关的APP界面中，运动类的如苹果健康，微信健康等。   其中运动类APP中一般支持查看天、月、年的数据图，由于界面宽度有限，当显示整月数据的时候，点与点之间的距离就会很近，用户也很难大概的估计点的数值，因此有的APP的折线图还支持点的点击查看数值功能，如微信运动的月数据（上图）,接下来就介绍一下如何绘制实现这样的界面和点击查看功能。">
+<meta property="og:description" content="一般开发中常见的是UIView或者它的子类，CALayer似乎并太不常见，最多也就是在倒圆角或者加阴影或者边框的时候想起它来，但是当有一些复杂动画或者不寻常视图显示需求的时候，亦或是界面卡顿束手无策的时候，你会发现CALayer才是UIView背后视图显示处理的真正玩家。 iOS开发常用的视图控件都是UIView的子类，比如：UILabel -&amp;gt; UIViewUIImageView -&amp;gt">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/308319-70471374557a6e92.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/308319-accc3497f7979679.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2018-01-26T03:10:37.000Z">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/308319-1b9da72ca50b3ea1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/308319-3602638d96f81d4c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/308319-a3b3fce0be4ff221.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2018-07-06T07:35:49.071Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="iOS开发折线图-支持视图点击查看值">
-<meta name="twitter:description" content="简述：折线图的使用场景主要集中在股票和与运动相关的APP界面中，运动类的如苹果健康，微信健康等。   其中运动类APP中一般支持查看天、月、年的数据图，由于界面宽度有限，当显示整月数据的时候，点与点之间的距离就会很近，用户也很难大概的估计点的数值，因此有的APP的折线图还支持点的点击查看数值功能，如微信运动的月数据（上图）,接下来就介绍一下如何绘制实现这样的界面和点击查看功能。">
-<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/308319-70471374557a6e92.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta name="twitter:title" content="Layer和Animation那些事（一）--关系篇">
+<meta name="twitter:description" content="一般开发中常见的是UIView或者它的子类，CALayer似乎并太不常见，最多也就是在倒圆角或者加阴影或者边框的时候想起它来，但是当有一些复杂动画或者不寻常视图显示需求的时候，亦或是界面卡顿束手无策的时候，你会发现CALayer才是UIView背后视图显示处理的真正玩家。 iOS开发常用的视图控件都是UIView的子类，比如：UILabel -&amp;gt; UIViewUIImageView -&amp;gt">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/308319-1b9da72ca50b3ea1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 
 
 
@@ -137,13 +138,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2016/08/31/iOS开发折线图-支持视图点击查看值/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/07/06/Layer和Animation那些事（一）-关系篇/"/>
 
 
 
 
 
-  <title>iOS开发折线图-支持视图点击查看值 | zwBlog</title>
+  <title>Layer和Animation那些事（一）--关系篇 | zwBlog</title>
   
 
 
@@ -276,7 +277,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/08/31/iOS开发折线图-支持视图点击查看值/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/06/Layer和Animation那些事（一）-关系篇/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="ZhiWei">
@@ -293,7 +294,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">iOS开发折线图-支持视图点击查看值</h1>
+          <h1 class="post-title" itemprop="name headline">Layer和Animation那些事（一）--关系篇</h1>
         
 
         <div class="post-meta">
@@ -305,8 +306,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-08-31T09:58:48+08:00">
-                2016-08-31
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-06T15:34:23+08:00">
+                2018-07-06
               </time>
             
 
@@ -328,8 +329,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/iOS开发/" itemprop="url" rel="index">
-                    <span itemprop="name">iOS开发</span>
+                  <a href="/categories/iOS图层和动画/" itemprop="url" rel="index">
+                    <span itemprop="name">iOS图层和动画</span>
                   </a>
                 </span>
 
@@ -365,17 +366,27 @@
       
 
       
-        <p>简述：<br>折线图的使用场景主要集中在股票和与运动相关的APP界面中，运动类的如苹果健康，微信健康等。</p>
-<p><img src="http://upload-images.jianshu.io/upload_images/308319-70471374557a6e92.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="WeChat_1472545882.jpeg"></p>
-<p><img src="http://upload-images.jianshu.io/upload_images/308319-accc3497f7979679.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="WeChat_1464241434.jpeg"></p>
-<p>其中运动类APP中一般支持查看天、月、年的数据图，由于界面宽度有限，当显示整月数据的时候，点与点之间的距离就会很近，用户也很难大概的估计点的数值，因此有的APP的折线图还支持点的点击查看数值功能，如微信运动的月数据（上图）,接下来就介绍一下如何绘制实现这样的界面和点击查看功能。<br><a id="more"></a></p>
+        <p>一般开发中常见的是<code>UIView</code>或者它的子类，<code>CALayer</code>似乎并太不常见，最多也就是在倒圆角或者加阴影或者边框的时候想起它来，但是当有一些复杂动画或者不寻常视图显示需求的时候，亦或是界面卡顿束手无策的时候，你会发现<code>CALayer</code>才是<code>UIView</code>背后视图显示处理的真正玩家。</p>
+<p>iOS开发常用的视图控件都是<code>UIView</code>的子类，比如：<br><code>UILabel -&gt; UIView</code><br><code>UIImageView -&gt; UIView</code><br><code>UITextView -&gt; UIScrollView -&gt; UIView</code><br><code>UIButton -&gt; UIControl -&gt; UIView</code><br><code>UITextField -&gt; UIControl -&gt; UIView</code><br><code>UISegmentedControl -&gt; UIControl -&gt; UIView</code><br><code>UIView</code>可以处理触摸事件，可以支持基于<code>Core Graphics</code>绘图，可以做仿射变换（如旋转或者缩放），或者简单的动画像滑动或者渐变。<br><a id="more"></a></p>
 <hr>
-<p>逻辑步骤：<br>1.首先图表的显示是通过绘制图层实现的，而由于渐变效果需要对图层进行剪切，所以要达到这样的显示效果，要两个View叠加显示，下层View为横纵坐标层，上层为折线图层。考虑到大部分折线图都会有侧滑加载更多的需求，因此笔者也用collectionView实现了该功能。</p>
-<p>2.关于数据的计算，笔者绘制的图表中的数据分为4部分，分别为：纵坐标，横坐标，计算后的点和显示点的实际数值。其中需要计算的一般为纵坐标，和显示点。由于笔者demo中用的都是计算过的假数据，所以此处详细的说一下数据到转化到图表显示坐标和点的思路。</p>
-<p>纵坐标的计算思路：<br>获取到该组数据的最大数值后，按约定取大于等于该最大值的一个值，例如：最大值为15987，约定是必须为整百，所以此处取16000，而此处分为4个阶段，16000/4 = 4000; 五个纵坐标就出来了（0，4000，8000，12000，16000）;</p>
-<p>点的计算思路：<br>此处表中拿到的初始数据是（步数，日期），需要转化为实际的坐标点（x，y）, 此处假设图表的区域宽和高分别为chartW、chartH,图中横坐标为一周的日期，一周7天为6段，每一段gap = chartW/6, x 根据数组中日期的count分别乘以gap就可以获取到了。 y的计算，计算点的步数数值设为stepY,该层图表的最大Y值设为MaxY,y = stepY*maxY/chartH; 这样就将（步数，日期）转化为（x,y）了。</p>
-<p>3.关于点击折线图点显示该点数据的问题，毫无疑问，接受点击的是折线图的上层View,所以在该图层的touchsBegan方法中获取点击的点，然后在该页面的所有点中遍历判断达到临界距离后，通过代理把距离最近的点的数值传给控制器或者父视图，让其动态显示。而需要注意的是，在页面滑动或者重新加载数据时，要记得清除显示数据。</p>
-<p><a href="https://github.com/MisterZhiWei/BrokenLineViewDemo" target="_blank" rel="noopener">demo地址</a> </p>
+<p><code>UIView</code>是基于<code>CALayer</code>的封装，目的在于接收触控事件，除此之外像刚提到的简单的动画或者仿射变换其实都是<code>CALayer</code>的能力，<code>UIView</code>只不过是通过对它的Layer层赋值和取值来完成这一操作的，每一个<code>UIView</code>都有一个<code>CALayer</code>实例图层属性，这个属性会和之后添加视图的实例图层属性行成关系树，用于控制显示图层。</p>
+<p>此处也可以留意到，其实<code>UIView</code>和<code>CALayer</code>是各司其职的，<code>UIView</code>负责响应链的处理，<code>CALayer</code>主要负责视图显示的图层关系和效果的处理，理解这一点，在有一些特殊视图显示和响应链操作需求的时候会有帮助。苹果之所以没有把触控事件和图层处理逻辑集中到一个类处理是因为iOS和Mac OS两个平台的交互事件不一样，如果直接设计两套代码，那关于图层部分其实很多是重复的，大部分区别只在于触控事件不同，所以这样代码封装有利于两个平台共享代码。</p>
+<ul>
+<li>布局相关的位置和尺寸的映射<br><code>UIView</code>有三个比较重要的布局属性：<code>frame</code>、<code>bounds</code>和<code>center</code>。<br><code>CALayer</code>对应的是：<code>frame</code>、<code>bounds</code>和<code>position</code>。</li>
+</ul>
+<p>我们在操作<code>UIView</code>这三个属性的时候实际上是操作<code>CALayer</code>对应的三个属性，所以<code>UIView</code>的三个属性仅仅是存取方法。所以给<code>CALayer</code>赋能“接收”触控事件是有性能代价的，由此也可知，如果我们在没有事件响应需求的时候，是可以通过直接创建并操作<code>CALayer</code>级别的图层显示来提升性能的。</p>
+<p><code>frame</code>属性并不是一个直接属性或者不是一个真实属性，它是由<code>bounds</code>、<code>position</code>和<code>transform</code>计算而来的，所以这三个属性任一个改变都会影响<code>frame</code>，同样<code>frame</code>改变也会影响它们。</p>
+<p>我们熟知的是<code>frame</code>是相对于父视图坐标尺寸，<code>bounds</code>是相对于自己的坐标尺寸。这样我们会觉得它们可能只是相对位置坐标不一样，宽高尺寸是一样的，其实不然。<code>frame</code>实际上代表了能覆盖图层的整个轴对齐的矩形区域，如果视图旋转的话，那么<code>frame</code>的宽高和<code>bounds</code>就不一样了。理解起来有点费劲，来张图就明白了。<br><img src="https://upload-images.jianshu.io/upload_images/308319-1b9da72ca50b3ea1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<ul>
+<li><p>锚点-anchorPoint<br><code>anchorPoint</code>是<code>CALayer</code>的属性，并没有对<code>UIView</code>暴露出来，修改它可以修改图层的位置，但不改变<code>position</code>。它的取值控件是{0,0}–{1,1}。<br><img src="https://upload-images.jianshu.io/upload_images/308319-3602638d96f81d4c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+</li>
+<li><p>坐标系<br>和<code>UIView</code>身处的二维空间不同，<code>CALayer</code>身处于一个三维空间中，所以它多了一个垂直于屏幕的z坐标轴，相关的两个属性为<code>CGFloat</code>类型的<code>zPosition</code>和<code>anchorPointZ</code>,一个用于描述图层在z坐标轴的位置，一个用于描述在z坐标轴方向发生几何变化时的参照锚点，默认值都是0，也就是所有视图添加后都在一个平面内。</p>
+</li>
+<li><p>技术小应用<br>这里我们可以假设一个需求：有两个Button，ButtonA和ButtonB，它们有一部分相交，需求是ButtonA要看起来是在上边显示的（如图），但是点击到相交的区域要ButtonB来响应。<br><img src="https://upload-images.jianshu.io/upload_images/308319-a3b3fce0be4ff221.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+</li>
+</ul>
+<p>PlanA：可以从事件响应入手，首先判断点击的点的区域是相交的区域，然后拦截父视图的<code>- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event；</code>方法返回ButtonB对象，这样就可以完成需求效果，但是两步都比较麻烦。</p>
+<p>PlanB：结合前边的内容，我们知道响应链和<code>UIView</code>有关系，显示层级和<code>CALayer</code>有关系，现在我们首先要保证响应关系，重叠区域的事件响应是按栈管理来处理的，最后添加的最先响应，那么我们首先保证ButtonB是最后添加的，此时ButtonB在重叠区域是在上边显示的，那么我要做的就是把ButtonA的视图层移动到上边来显示就可以了，这个时候就用到了<code>CALayer</code>的<code>zPosition</code>属性了，因为默认都是0，所以把ButtonA视图的<code>CALayer</code>实例属性的<code>zPosition</code>属性设置成0.001就OK了，相比PlanA即优雅又简单。</p>
 
       
     </div>
@@ -393,7 +404,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/折线图/" rel="tag"># 折线图</a>
+            <a href="/tags/图层/" rel="tag"># 图层</a>
+          
+            <a href="/tags/动画/" rel="tag"># 动画</a>
           
         </div>
       
@@ -406,8 +419,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/08/25/封装静态库调试时添加工程的相关问题/" rel="next" title="封装静态库调试时添加工程的相关问题">
-                <i class="fa fa-chevron-left"></i> 封装静态库调试时添加工程的相关问题
+              <a href="/2018/02/28/快速排序算法-Objective-C/" rel="next" title="快速排序算法_Objective-C">
+                <i class="fa fa-chevron-left"></i> 快速排序算法_Objective-C
               </a>
             
           </div>
@@ -415,10 +428,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/03/14/分页控制器半自动滑动（仿36氪）/" rel="prev" title="分页控制器半自动滑动（仿36氪）">
-                分页控制器半自动滑动（仿36氪） <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
